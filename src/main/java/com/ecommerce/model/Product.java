@@ -1,19 +1,22 @@
 package com.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "fieldHandler"})
 public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "product_id",nullable = false, updatable = false)
+    @Column(name = "product_id", nullable = false, updatable = false)
     Long id;
 
-    @Column(name="product_name")
+    @Column(name = "product_name")
     String name;
-    @Column(name="product_price")
+    @Column(name = "product_price")
     Double price;
 
     public Long getId() {
