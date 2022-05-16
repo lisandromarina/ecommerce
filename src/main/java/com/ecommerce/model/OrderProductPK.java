@@ -14,6 +14,7 @@ import java.util.Objects;
 @Embeddable
 public class OrderProductPK implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "order_id")
     @JsonBackReference

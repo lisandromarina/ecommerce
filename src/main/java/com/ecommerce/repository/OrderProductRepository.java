@@ -35,4 +35,13 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Orde
     )
     void deleteByOrderIdAndOrderProductId(@Param("orderId") Long orderId,
                                           @Param("productId") Long productId);
+
+    @Modifying
+    @Query(
+            "DELETE " +
+                    "FROM OrderProduct op " +
+                    "WHERE op.pk.order.id = :orderId "
+    )
+    void deleteAllByOrderId(@Param("orderId") Long orderId);
+
 }

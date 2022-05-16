@@ -10,12 +10,14 @@ import java.util.Objects;
 @Entity
 public class OrderProduct implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @EmbeddedId
     private OrderProductPK pk;
 
     @Column(nullable = false)
     private Integer quantity;
 
+    @Column(nullable = false)
     private Double sellPrice;
 
     public OrderProduct() {

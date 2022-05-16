@@ -22,6 +22,11 @@ public class OrderController {
         orderService.createOrder();
     }
 
+    @DeleteMapping("/delete/{id}")
+    public void deleteOrder(@PathVariable("id") Long id) {
+        orderService.deleteOrderById(id);
+    }
+
     @GetMapping("/findById/{id}")
     public OrderDTO findOrderById(@PathVariable("id") Long id) {
         OrderDTO orderDTO = orderService.findOrderDTOById(id);

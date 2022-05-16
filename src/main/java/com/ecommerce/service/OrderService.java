@@ -11,10 +11,12 @@ import com.ecommerce.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Set;
 
 @Service
+@Transactional
 public class OrderService {
 
     @Autowired
@@ -43,5 +45,11 @@ public class OrderService {
     //return all orderProducts for an Order
     public Set<OrderProductDTO> findOrderProductsByOrderId(Long id) {
         return orderProductRepository.findOrderProductByOrderId(id);
+    }
+
+    //Delete order by orderId
+    public void deleteOrderById(Long orderId){
+        orderProductRepository.deleteAllByOrderId(orderId);
+        orderRepository.deleteById(orderId);
     }
 }

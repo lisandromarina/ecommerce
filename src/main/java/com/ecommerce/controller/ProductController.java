@@ -29,7 +29,7 @@ public class ProductController {
         productService.saveProduct(product);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public void updateProduct(@RequestBody Product product) {
         productService.updateProduct(product);
     }
