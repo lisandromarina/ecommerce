@@ -27,15 +27,10 @@ public class Order implements Serializable {
     @Column(name = "status")
     private Boolean status;
 
-    @OneToMany(mappedBy = "pk.order", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Set<OrderProduct> orderProducts = new HashSet<>();
-
-    public Order(Long id, LocalDate dateCreated, Boolean status, Set<OrderProduct> orderProducts) {
+    public Order(Long id, LocalDate dateCreated, Boolean status) {
         this.id = id;
         this.dateCreated = dateCreated;
         this.status = status;
-        this.orderProducts = orderProducts;
     }
 
     public Order() {
@@ -64,14 +59,5 @@ public class Order implements Serializable {
     public void setStatus(Boolean status) {
         this.status = status;
     }
-
-    public Set<OrderProduct> getOrderProducts() {
-        return orderProducts;
-    }
-
-    public void setOrderProducts(Set<OrderProduct> orderProducts) {
-        this.orderProducts = orderProducts;
-    }
-
 
 }
