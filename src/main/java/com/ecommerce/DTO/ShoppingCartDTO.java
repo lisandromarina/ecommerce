@@ -9,8 +9,6 @@ public class ShoppingCartDTO {
 
     private LocalDate dateCreated;
 
-    private Boolean status;
-
     private Set<ShoppingCartProductDTO> shoppingCartProductsDTO = new HashSet<>();
 
     public Long getId() {
@@ -29,14 +27,6 @@ public class ShoppingCartDTO {
         this.dateCreated = dateCreated;
     }
 
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
     public Set<ShoppingCartProductDTO> getShoppingCartProductsDTO() {
         return shoppingCartProductsDTO;
     }
@@ -45,9 +35,8 @@ public class ShoppingCartDTO {
         this.shoppingCartProductsDTO = shoppingCartProducts;
     }
 
-    public ShoppingCartDTO(Long id, LocalDate dateCreated, Boolean status) {
+    public ShoppingCartDTO(Long id, LocalDate dateCreated) {
         this.id = id;
         this.dateCreated = dateCreated;
-        this.status = status;
     }
 }

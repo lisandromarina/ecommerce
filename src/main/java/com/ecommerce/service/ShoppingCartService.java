@@ -25,7 +25,6 @@ public class ShoppingCartService {
     //Save an order in the database
     public ShoppingCart createShoppingCart() {
         ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setStatus(false);
         shoppingCart.setDateCreated(LocalDate.now());
         return shoppingCartRepository.save(shoppingCart);
     }

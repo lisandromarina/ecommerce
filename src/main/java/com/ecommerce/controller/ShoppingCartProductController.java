@@ -1,6 +1,7 @@
 package com.ecommerce.controller;
 
 import com.ecommerce.DTO.ShoppingCartDTO;
+import com.ecommerce.DTO.ShoppingCartProductDTO;
 import com.ecommerce.service.ShoppingCartProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,13 @@ public class ShoppingCartProductController {
     ShoppingCartProductService shoppingCartProductService;
 
     @PutMapping("/update")
-    public void updateShoppingCartProduct(@RequestBody ShoppingCartDTO shoppingCartDTO) {
-        shoppingCartProductService.updateShoppingCartProducts(shoppingCartDTO);
+    public void updateShoppingCartProduct(@RequestBody ShoppingCartProductDTO shoppingCartProductDTO) {
+        shoppingCartProductService.updateShoppingCartProducts(shoppingCartProductDTO);
     }
 
-    @DeleteMapping("/delete/{orderId}/{orderProductId}")
-    public void deleteShoppingCartProduct(@PathVariable("orderId") Long orderId,
-                                          @PathVariable("orderProductId") Long orderProductId) {
-        shoppingCartProductService.deleteShoppingCartProduct(orderId, orderProductId);
+    @DeleteMapping("/delete/{shoppingCartId}/{productId}")
+    public void deleteShoppingCartProduct(@PathVariable("shoppingCartId") Long shoppingCartId,
+                                          @PathVariable("productId") Long productId) {
+        shoppingCartProductService.deleteShoppingCartProduct(shoppingCartId, productId);
     }
 }

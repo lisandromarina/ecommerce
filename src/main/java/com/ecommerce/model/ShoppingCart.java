@@ -20,17 +20,13 @@ public class ShoppingCart implements Serializable {
     @Column(name = "date_created")
     private LocalDate dateCreated;
 
-    @Column(name = "status")
-    private Boolean status;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public ShoppingCart(Long id, LocalDate dateCreated, Boolean status) {
+    public ShoppingCart(Long id, LocalDate dateCreated) {
         this.id = id;
         this.dateCreated = dateCreated;
-        this.status = status;
     }
 
     public ShoppingCart() {
@@ -50,14 +46,6 @@ public class ShoppingCart implements Serializable {
 
     public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
     }
 
 }

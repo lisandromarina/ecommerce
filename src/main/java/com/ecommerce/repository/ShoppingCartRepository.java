@@ -11,8 +11,7 @@ public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long
     @Query(
             "SELECT new com.ecommerce.DTO.ShoppingCartDTO(" +
                     "sc.id, " +
-                    "sc.dateCreated, " +
-                    "sc.status) " +
+                    "sc.dateCreated) " +
                     "FROM ShoppingCart sc " +
                     "WHERE sc.id = :id"
     )

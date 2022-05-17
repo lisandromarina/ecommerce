@@ -16,7 +16,6 @@ public interface ShoppingCartProductRepository extends JpaRepository<ShoppingCar
             "SELECT new com.ecommerce.DTO.ShoppingCartProductDTO(" +
                     "p.id, " +
                     "p.name, " +
-                    "p.price," +
                     "scp.sellPrice, " +
                     "scp.quantity) " +
                     "FROM ShoppingCartProduct scp " +
@@ -42,5 +41,6 @@ public interface ShoppingCartProductRepository extends JpaRepository<ShoppingCar
                     "WHERE scp.pk.shoppingCart.id = :shoppingCartId "
     )
     void deleteAllByShoppingCartId(@Param("shoppingCartId") Long shoppingCartId);
+
 
 }

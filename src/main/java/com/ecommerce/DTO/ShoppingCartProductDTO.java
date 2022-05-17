@@ -1,17 +1,26 @@
 package com.ecommerce.DTO;
 
 public class ShoppingCartProductDTO {
-    private ProductDTO productDTO;
+    private Long idProduct;
+    private Long idShoppingCart;
     private Double sellPrice;
-
+    private String nameProduct;
     private Integer quantity;
 
-    public ProductDTO getProductDTO() {
-        return productDTO;
+    public Long getIdProduct() {
+        return idProduct;
     }
 
-    public void setProductDTO(ProductDTO productDTO) {
-        this.productDTO = productDTO;
+    public void setIdProduct(Long idProduct) {
+        this.idProduct = idProduct;
+    }
+
+    public Long getIdShoppingCart() {
+        return idShoppingCart;
+    }
+
+    public void setIdShoppingCart(Long idShoppingCart) {
+        this.idShoppingCart = idShoppingCart;
     }
 
     public Double getSellPrice() {
@@ -30,12 +39,17 @@ public class ShoppingCartProductDTO {
         this.quantity = quantity;
     }
 
-    public ShoppingCartProductDTO(Long productId, String name, Double price,
-                                  Double sellPrice, Integer quantity) {
-        this.productDTO = new ProductDTO();
-        this.productDTO.setName(name);
-        this.productDTO.setId(productId);
-        this.productDTO.setPrice(price);
+    public String getNameProduct() {
+        return nameProduct;
+    }
+
+    public void setNameProduct(String nameProduct) {
+        this.nameProduct = nameProduct;
+    }
+
+    public ShoppingCartProductDTO(Long productId, String name, Double sellPrice, Integer quantity) {
+        this.nameProduct = name;
+        this.idProduct = productId;
         this.sellPrice = sellPrice;
         this.quantity = quantity;
     }

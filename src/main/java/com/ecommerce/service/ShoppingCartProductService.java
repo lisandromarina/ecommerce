@@ -6,6 +6,7 @@ import com.ecommerce.model.ShoppingCart;
 import com.ecommerce.model.ShoppingCartProduct;
 import com.ecommerce.model.ShoppingCartProductPK;
 import com.ecommerce.model.Product;
+import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.repository.ShoppingCartProductRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,6 +23,9 @@ public class ShoppingCartProductService {
     @Autowired
     ShoppingCartProductRepository shoppingCartProductRepository;
 
+    @Autowired
+    ProductRepository productRepository;
+
     //Create an ShoppingCart from ShoppingCartDTO
     private ShoppingCart createShoppingCartFromDTO(ShoppingCartDTO shoppingCartDTO) {
         ShoppingCart shoppingCart = new ShoppingCart();
@@ -30,43 +34,51 @@ public class ShoppingCartProductService {
     }
 
     //Create an ShoppingCartProductPk
-    private ShoppingCartProductPK createShoppingCartProductPk(ShoppingCart shoppingCart, Product product) {
+    private ShoppingCartProductPK createShoppingCartProductPk(Long idShoppingCart, Long idProduct) {
         ShoppingCartProductPK shoppingCartProductPK = new ShoppingCartProductPK();
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setId(idShoppingCart);
+
+        Product product = new Product();
+        product.setId(idProduct);
+
         shoppingCartProductPK.setOrder(shoppingCart);
         shoppingCartProductPK.setProduct(product);
+
         return shoppingCartProductPK;
     }
 
     //Create ShoppingCartProduct from a ShoppingCartProductDTO
-    private ShoppingCartProduct createShoppingCartProduct(ShoppingCartProductPK shoppingCartProductPK, ShoppingCartProductDTO shoppingCartProductDTO) {
+    private ShoppingCartProduct createShoppingCartProduct(ShoppingCartProductPK shoppingCartProductPK,
+                                                          ShoppingCartProductDTO shoppingCartProductDTO) {
+
         ShoppingCartProduct shoppingCartProduct = new ShoppingCartProduct();
         shoppingCartProduct.setPk(shoppingCartProductPK);
         shoppingCartProduct.setQuantity(shoppingCartProductDTO.getQuantity());
-        shoppingCartProduct.setSellPrice(shoppingCartProductDTO.getProductDTO().getPrice());
+
+        Double sellPrice = productRepository.findPriceById(shoppingCartProductPK.getProduct().getId());
+        shoppingCartProduct.setSellPrice(sellPrice);
+
         return shoppingCartProduct;
     }
 
-    //update orderProducts for a specific order
-    public void updateShoppingCartProducts(ShoppingCartDTO shoppingCartDTO) {
-        ShoppingCart shoppingCart = createShoppingCartFromDTO(shoppingCartDTO);
-        Set<ShoppingCartProductDTO> shoppingCartProductDTOS = shoppingCartDTO.getShoppingCartProductsDTO();
-        for (ShoppingCartProductDTO shoppingCartProductDTO : shoppingCartProductDTOS) {
+    //update ShoppingCartProducts for a specific shoppingCart
+    public void updateShoppingCartProducts(ShoppingCartProductDTO shoppingCartProductDTO) {
+            Long idShoppingCart = shoppingCartProductDTO.getIdShoppingCart();
+            Long idProduct = shoppingCartProductDTO.getIdProduct();
 
-            ObjectMapper mapper = new ObjectMapper();
-
-            Product product = mapper.convertValue(shoppingCartProductDTO.getProductDTO(),
-                    new TypeReference<Product>() {});
-
-            ShoppingCartProductPK shoppingCartProductPK = createShoppingCartProductPk(shoppingCart, product);
+            ShoppingCartProductPK shoppingCartProductPK = createShoppingCartProductPk(idShoppingCart, idProduct);
 
             ShoppingCartProduct shoppingCartProduct = createShoppingCartProduct(shoppingCartProductPK, shoppingCartProductDTO);
 
             shoppingCartProductRepository.save(shoppingCartProduct);
-        }
+
     }
 
-    //delete one OrderProduct for an Order
-    public void deleteShoppingCartProduct(Long shoppingCartId, Long shoppingCartProductId) {
-        shoppingCartProductRepository.deleteByShoppingCartIdAndShoppingCartProductId(shoppingCartId, shoppingCartProductId);
+    //delete one ShoppingCartProduct for an ShoppingCart
+    public void deleteShoppingCartProduct(Long shoppingCartId, Long productId) {
+        shoppingCartProductRepository
+                .deleteByShoppingCartIdAndShoppingCartProductId(shoppingCartId, productId);
     }
 }
