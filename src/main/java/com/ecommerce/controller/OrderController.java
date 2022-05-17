@@ -31,7 +31,7 @@ public class OrderController {
     public OrderDTO findOrderById(@PathVariable("id") Long id) {
         OrderDTO orderDTO = orderService.findOrderDTOById(id);
         Set<OrderProductDTO> orderProductDTO = orderService.findOrderProductsByOrderId(id);
-        orderDTO.setOrderProducts(orderProductDTO);
+        orderDTO.setOrderProductsDTO(orderProductDTO);
         return orderDTO;
     }
 }

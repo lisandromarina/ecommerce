@@ -27,6 +27,10 @@ public class Order implements Serializable {
     @Column(name = "status")
     private Boolean status;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Order(Long id, LocalDate dateCreated, Boolean status) {
         this.id = id;
         this.dateCreated = dateCreated;

@@ -11,7 +11,7 @@ public class OrderDTO {
 
     private Boolean status;
 
-    private Set<OrderProductDTO> orderProducts = new HashSet<>();
+    private Set<OrderProductDTO> orderProductsDTO = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -37,12 +37,12 @@ public class OrderDTO {
         this.status = status;
     }
 
-    public Set<OrderProductDTO> getOrderProducts() {
-        return orderProducts;
+    public Set<OrderProductDTO> getOrderProductsDTO() {
+        return orderProductsDTO;
     }
 
-    public void setOrderProducts(Set<OrderProductDTO> orderProducts) {
-        this.orderProducts = orderProducts;
+    public void setOrderProductsDTO(Set<OrderProductDTO> orderProducts) {
+        this.orderProductsDTO = orderProducts;
     }
 
     public OrderDTO(Long id, LocalDate dateCreated, Boolean status) {

@@ -9,17 +9,17 @@ import java.util.List;
 import java.util.Set;
 
 public class OrderProductDTO {
-    private Product product;
+    private ProductDTO productDTO;
     private Double sellPrice;
 
     private Integer quantity;
 
-    public Product getProduct() {
-        return product;
+    public ProductDTO getProductDTO() {
+        return productDTO;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductDTO(ProductDTO productDTO) {
+        this.productDTO = productDTO;
     }
 
     public Double getSellPrice() {
@@ -28,9 +28,6 @@ public class OrderProductDTO {
 
     public void setSellPrice(Double sellPrice) {
         this.sellPrice = sellPrice;
-    }
-
-    public OrderProductDTO() {
     }
 
     public Integer getQuantity() {
@@ -43,10 +40,10 @@ public class OrderProductDTO {
 
     public OrderProductDTO(Long productId, String name, Double price,
                            Double sellPrice, Integer quantity) {
-        this.product = new Product();
-        this.product.setName(name);
-        this.product.setId(productId);
-        this.product.setPrice(price);
+        this.productDTO = new ProductDTO();
+        this.productDTO.setName(name);
+        this.productDTO.setId(productId);
+        this.productDTO.setPrice(price);
         this.sellPrice = sellPrice;
         this.quantity = quantity;
     }
