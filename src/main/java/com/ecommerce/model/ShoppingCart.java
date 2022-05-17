@@ -1,23 +1,19 @@
 package com.ecommerce.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
-@Table(name = "orders")
-public class Order implements Serializable {
+@Table(name = "shopping_carts")
+public class ShoppingCart implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "order_id", nullable = false, updatable = false)
+    @Column(name = "shopping_cart_id", nullable = false, updatable = false)
     private Long id;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
@@ -31,13 +27,13 @@ public class Order implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Order(Long id, LocalDate dateCreated, Boolean status) {
+    public ShoppingCart(Long id, LocalDate dateCreated, Boolean status) {
         this.id = id;
         this.dateCreated = dateCreated;
         this.status = status;
     }
 
-    public Order() {
+    public ShoppingCart() {
     }
 
     public Long getId() {

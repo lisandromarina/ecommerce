@@ -1,14 +1,6 @@
 package com.ecommerce.DTO;
 
-import com.ecommerce.model.Order;
-import com.ecommerce.model.OrderProduct;
-import com.ecommerce.model.Product;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-public class OrderProductDTO {
+public class ShoppingCartProductDTO {
     private ProductDTO productDTO;
     private Double sellPrice;
 
@@ -38,8 +30,8 @@ public class OrderProductDTO {
         this.quantity = quantity;
     }
 
-    public OrderProductDTO(Long productId, String name, Double price,
-                           Double sellPrice, Integer quantity) {
+    public ShoppingCartProductDTO(Long productId, String name, Double price,
+                                  Double sellPrice, Integer quantity) {
         this.productDTO = new ProductDTO();
         this.productDTO.setName(name);
         this.productDTO.setId(productId);

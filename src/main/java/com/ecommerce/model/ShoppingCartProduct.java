@@ -3,16 +3,17 @@ package com.ecommerce.model;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-public class OrderProduct implements Serializable {
+@Table(name = "shopping_cart_product")
+public class ShoppingCartProduct implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
-    private OrderProductPK pk;
+    private ShoppingCartProductPK pk;
 
     @Column(nullable = false)
     private Integer quantity;
@@ -20,21 +21,21 @@ public class OrderProduct implements Serializable {
     @Column(nullable = false)
     private Double sellPrice;
 
-    public OrderProduct() {
+    public ShoppingCartProduct() {
     }
 
-    public OrderProduct(Order order, Product product, Integer quantity) {
-        pk = new OrderProductPK();
-        pk.setOrder(order);
+    public ShoppingCartProduct(ShoppingCart shoppingCart, Product product, Integer quantity) {
+        pk = new ShoppingCartProductPK();
+        pk.setOrder(shoppingCart);
         pk.setProduct(product);
         this.quantity = quantity;
     }
 
-    public OrderProductPK getPk() {
+    public ShoppingCartProductPK getPk() {
         return pk;
     }
 
-    public void setPk(OrderProductPK pk) {
+    public void setPk(ShoppingCartProductPK pk) {
         this.pk = pk;
     }
 
@@ -58,7 +59,7 @@ public class OrderProduct implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OrderProduct that = (OrderProduct) o;
+        ShoppingCartProduct that = (ShoppingCartProduct) o;
         return Objects.equals(pk, that.pk) && Objects.equals(quantity, that.quantity);
     }
 
