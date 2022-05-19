@@ -6,10 +6,16 @@ import java.util.Set;
 
 public class ShoppingCartDTO {
     private Long id;
-
     private LocalDate dateCreated;
-
     private Set<ShoppingCartProductDTO> shoppingCartProductsDTO = new HashSet<>();
+
+    public ShoppingCartDTO() {
+    }
+
+    public ShoppingCartDTO(Long id, LocalDate dateCreated) {
+        this.id = id;
+        this.dateCreated = dateCreated;
+    }
 
     public Long getId() {
         return id;
@@ -33,10 +39,5 @@ public class ShoppingCartDTO {
 
     public void setShoppingCartProductsDTO(Set<ShoppingCartProductDTO> shoppingCartProducts) {
         this.shoppingCartProductsDTO = shoppingCartProducts;
-    }
-
-    public ShoppingCartDTO(Long id, LocalDate dateCreated) {
-        this.id = id;
-        this.dateCreated = dateCreated;
     }
 }

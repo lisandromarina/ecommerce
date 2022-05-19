@@ -2,6 +2,8 @@ package com.ecommerce.controller;
 
 import com.ecommerce.DTO.ShoppingCartDTO;
 import com.ecommerce.DTO.ShoppingCartProductDTO;
+import com.ecommerce.DTO.UserDTO;
+import com.ecommerce.service.ShoppingCartProductService;
 import com.ecommerce.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +17,12 @@ public class ShoppingCartController {
     @Autowired
     ShoppingCartService shoppingCartService;
 
-    @PostMapping("/create")
-    public void createShoppingCart() {
-        shoppingCartService.createShoppingCart();
+    @Autowired
+    ShoppingCartProductService shoppingCartProductService;
+
+    @PostMapping("/create/{userId}")
+    public void createShoppingCart(@PathVariable("userId") Long userId) {
+        shoppingCartService.createShoppingCart(userId);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -28,8 +33,11 @@ public class ShoppingCartController {
     @GetMapping("/findById/{id}")
     public ShoppingCartDTO findShoppingCartById(@PathVariable("id") Long id) {
         ShoppingCartDTO shoppingCartDTO = shoppingCartService.findShoppingCartDTOById(id);
-        Set<ShoppingCartProductDTO> shoppingCartProductDTO = shoppingCartService.findShoppingCartProductsByShoppingCartId(id);
+
+        Set<ShoppingCartProductDTO> shoppingCartProductDTO = shoppingCartProductService
+                .findShoppingCartProductsByShoppingCartId(id);
         shoppingCartDTO.setShoppingCartProductsDTO(shoppingCartProductDTO);
+
         return shoppingCartDTO;
     }
 }

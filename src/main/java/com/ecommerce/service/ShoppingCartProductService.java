@@ -81,4 +81,9 @@ public class ShoppingCartProductService {
         shoppingCartProductRepository
                 .deleteByShoppingCartIdAndShoppingCartProductId(shoppingCartId, productId);
     }
+
+    //return all orderProducts for an Order
+    public Set<ShoppingCartProductDTO> findShoppingCartProductsByShoppingCartId(Long id) {
+        return shoppingCartProductRepository.findShoppingCartProductByShoppingCartId(id);
+    }
 }

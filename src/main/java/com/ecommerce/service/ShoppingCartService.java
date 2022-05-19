@@ -3,8 +3,10 @@ package com.ecommerce.service;
 import com.ecommerce.DTO.ShoppingCartDTO;
 import com.ecommerce.DTO.ShoppingCartProductDTO;
 import com.ecommerce.model.ShoppingCart;
+import com.ecommerce.model.User;
 import com.ecommerce.repository.ShoppingCartProductRepository;
 import com.ecommerce.repository.ShoppingCartRepository;
+import com.ecommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +24,17 @@ public class ShoppingCartService {
     @Autowired
     ShoppingCartProductRepository shoppingCartProductRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     //Save an order in the database
-    public ShoppingCart createShoppingCart() {
+    public ShoppingCart createShoppingCart(Long userId) {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setDateCreated(LocalDate.now());
+
+        User user = userRepository.findById(userId).orElseThrow();
+        shoppingCart.setUser(user);
+
         return shoppingCartRepository.save(shoppingCart);
     }
 
@@ -36,11 +45,6 @@ public class ShoppingCartService {
     //return order by id
     public ShoppingCartDTO findShoppingCartDTOById(Long id) {
         return shoppingCartRepository.findShoppingCartDTOById(id);
-    }
-
-    //return all orderProducts for an Order
-    public Set<ShoppingCartProductDTO> findShoppingCartProductsByShoppingCartId(Long id) {
-        return shoppingCartProductRepository.findShoppingCartProductByShoppingCartId(id);
     }
 
     //Delete order by orderId

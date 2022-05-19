@@ -18,7 +18,7 @@ public class User {
     private String firstName;
 
     @Column(name = "last_name", nullable = false)
-    private String LastName;
+    private String lastName;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "date_created")
@@ -27,9 +27,9 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
-    //@ManyToOne
-    //@JoinColumn(name = "user_id")
-    //private Role role;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     public Long getId() {
         return id;
@@ -48,11 +48,11 @@ public class User {
     }
 
     public String getLastName() {
-        return LastName;
+        return lastName;
     }
 
     public void setLastName(String lastName) {
-        LastName = lastName;
+        this.lastName = lastName;
     }
 
     public LocalDate getDateCreated() {
@@ -61,5 +61,21 @@ public class User {
 
     public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

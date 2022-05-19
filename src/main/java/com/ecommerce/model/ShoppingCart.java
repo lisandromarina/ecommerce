@@ -21,7 +21,7 @@ public class ShoppingCart implements Serializable {
     private LocalDate dateCreated;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
     public ShoppingCart(Long id, LocalDate dateCreated) {
@@ -48,4 +48,11 @@ public class ShoppingCart implements Serializable {
         this.dateCreated = dateCreated;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
