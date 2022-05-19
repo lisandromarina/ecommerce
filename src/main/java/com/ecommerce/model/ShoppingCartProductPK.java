@@ -1,35 +1,32 @@
 package com.ecommerce.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class OrderProductPK implements Serializable {
+public class ShoppingCartProductPK implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "shopping_cart_id")
     @JsonBackReference
-    private Order order;
+    private ShoppingCart shoppingCart;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public Order getOrder() {
-        return order;
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrder(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart;
     }
 
     public Product getProduct() {
@@ -44,13 +41,13 @@ public class OrderProductPK implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OrderProductPK that = (OrderProductPK) o;
-        return Objects.equals(order, that.order) && Objects.equals(product, that.product);
+        ShoppingCartProductPK that = (ShoppingCartProductPK) o;
+        return Objects.equals(shoppingCart, that.shoppingCart) && Objects.equals(product, that.product);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(order, product);
+        return Objects.hash(shoppingCart, product);
     }
 
 
