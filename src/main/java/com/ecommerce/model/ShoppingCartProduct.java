@@ -24,13 +24,6 @@ public class ShoppingCartProduct implements Serializable {
     public ShoppingCartProduct() {
     }
 
-    public ShoppingCartProduct(ShoppingCart shoppingCart, Product product, Integer quantity) {
-        pk = new ShoppingCartProductPK();
-        pk.setOrder(shoppingCart);
-        pk.setProduct(product);
-        this.quantity = quantity;
-    }
-
     public ShoppingCartProductPK getPk() {
         return pk;
     }

@@ -27,10 +27,6 @@ public class UserService {
 
     public void createUser(UserDTO userDTO){
         User user = new User();
-        System.out.println(userDTO.getFirstName());
-        System.out.println(userDTO.getLastName());
-        System.out.println(userDTO.getEmail());
-        System.out.println(userDTO.getRoleId());
 
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
