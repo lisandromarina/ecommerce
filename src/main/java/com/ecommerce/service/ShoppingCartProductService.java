@@ -8,8 +8,6 @@ import com.ecommerce.model.ShoppingCartProductPK;
 import com.ecommerce.model.Product;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.repository.ShoppingCartProductRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

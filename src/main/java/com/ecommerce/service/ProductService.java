@@ -1,7 +1,6 @@
 package com.ecommerce.service;
 
 import com.ecommerce.DTO.ProductDTO;
-import com.ecommerce.exception.ProductNotFoundException;
 import com.ecommerce.model.Product;
 import com.ecommerce.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;

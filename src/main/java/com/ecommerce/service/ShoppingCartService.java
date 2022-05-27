@@ -1,7 +1,6 @@
 package com.ecommerce.service;
 
 import com.ecommerce.DTO.ShoppingCartDTO;
-import com.ecommerce.DTO.ShoppingCartProductDTO;
 import com.ecommerce.model.ShoppingCart;
 import com.ecommerce.model.User;
 import com.ecommerce.repository.ShoppingCartProductRepository;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Service
 @Transactional
