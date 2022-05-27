@@ -1,5 +1,6 @@
 package com.ecommerce.service;
 
+import com.ecommerce.DTO.ProductDTO;
 import com.ecommerce.exception.ProductNotFoundException;
 import com.ecommerce.model.Product;
 import com.ecommerce.repository.ProductRepository;
@@ -11,29 +12,38 @@ import java.util.List;
 
 @Service
 @Transactional
-public class ProductService {
+public class ProductService implements AbmService<ProductDTO> {
 
     @Autowired
     ProductRepository productRepository;
 
-    public void saveProduct(Product product) {
-        productRepository.save(product);
+    @Override
+    public void save(ProductDTO productDTO) {
+            Product product = new Product();
+            product.setName(productDTO.getName());
+            product.setPrice(productDTO.getPrice());
+
+            productRepository.save(product);
     }
 
-    public List<Product> findAllProducts() {
-        return productRepository.findAll();
+    @Override
+    public List<ProductDTO> findAll() {
+        return productRepository.findAllDTO();
     }
 
-    public void updateProduct(Product product) {
-        productRepository.save(product);
+    @Override
+    public void update(ProductDTO product) {
+
+        //productRepository.save(product);
     }
 
-    public Product findProductById(Long id) {
-        return productRepository.findProductById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product by id " + id + " was not found"));
+    @Override
+    public ProductDTO findById(Long id) {
+        return productRepository.findProductDTOById(id);
     }
 
-    public void deleteProduct(Long productId) {
+    @Override
+    public void delete(Long productId) {
         productRepository.deleteProductById(productId);
     }
 }

@@ -18,27 +18,27 @@ public class RoleController {
 
     @PostMapping("/save")
     public void createRole(@RequestBody RoleDTO roleDTO){
-        roleService.createRole(roleDTO);
+        roleService.save(roleDTO);
     }
 
     @PutMapping("/update")
     public void updateRole(RoleDTO roleDTO){
-        //userService.createUser(userDTO);
+        //userService.update(userDTO);
     }
 
     @GetMapping("/findAll")
     public List<RoleDTO> findAllRole(){
-        return roleService.findAllRoles();
+        return roleService.findAll();
     }
 
     @GetMapping("/findById/{roleId}")
     public RoleDTO findRoleDTOById(@PathVariable ("roleId") Long roleId){
-        return roleService.findRoleDTOByid(roleId);
+        return roleService.findById(roleId);
     }
 
     @DeleteMapping("/delete/{roleId}")
     public void deleteRole(@PathVariable("roleId") Long roleId){
-        roleService.deleteRole(roleId);
+        roleService.delete(roleId);
     }
 
 }

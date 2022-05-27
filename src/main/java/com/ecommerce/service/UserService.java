@@ -17,7 +17,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class UserService {
+public class UserService implements AbmService<UserDTO>{
 
     @Autowired
     UserRepository userRepository;
@@ -25,7 +25,7 @@ public class UserService {
     @Autowired
     RoleRepository roleRepository;
 
-    public void createUser(UserDTO userDTO){
+    public void save(UserDTO userDTO){
         User user = new User();
 
         user.setFirstName(userDTO.getFirstName());
@@ -39,19 +39,23 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void updateUser(UserDTO userDTO){
+    @Override
+    public void update(UserDTO userDTO){
         //userService.createUser(userDTO);
     }
 
-    public List<UserDTO> findAllUser(){
+    @Override
+    public List<UserDTO> findAll(){
         return userRepository.findAllUsers();
     }
 
-    public UserDTO findUserById(Long userId){
+    @Override
+    public UserDTO findById(Long userId){
         return userRepository.findUserDTOById(userId);
     }
 
-    public void deleteUser(Long userId){
+    @Override
+    public void delete(Long userId){
         userRepository.deleteById(userId);
     }
 }

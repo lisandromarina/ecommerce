@@ -16,26 +16,26 @@ public class UserController {
 
     @PostMapping("/create")
     public void createUser(@RequestBody UserDTO userDTO){
-        userService.createUser(userDTO);
+        userService.save(userDTO);
     }
 
     @PutMapping("/update")
     public void updateUser(UserDTO userDTO){
-        //userService.createUser(userDTO);
+        //userService.create(userDTO);
     }
 
     @GetMapping("/findAll")
     public List<UserDTO> findAllUser(){
-        return userService.findAllUser();
+        return userService.findAll();
     }
 
     @GetMapping("/findById/{userId}")
     public UserDTO findUserById(@PathVariable ("userId") Long userId){
-        return userService.findUserById(userId);
+        return userService.findById(userId);
     }
 
     @DeleteMapping("/delete/{userId}")
     public void deleteUser(@PathVariable("userId") Long userId){
-        userService.deleteUser(userId);
+        userService.delete(userId);
     }
 }

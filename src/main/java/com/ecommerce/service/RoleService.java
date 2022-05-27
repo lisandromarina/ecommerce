@@ -12,27 +12,36 @@ import java.util.List;
 
 @Service
 @Transactional
-public class RoleService {
+public class RoleService implements AbmService<RoleDTO>{
 
     @Autowired
     RoleRepository roleRepository;
 
-    public void createRole(RoleDTO roleDTO){
+    @Override
+    public void save(RoleDTO roleDTO){
         Role role = new Role();
         role.setName(roleDTO.getName());
 
         roleRepository.save(role);
     }
 
-    public List<RoleDTO> findAllRoles(){
+    @Override
+    public List<RoleDTO> findAll(){
         return roleRepository.findAllRoles();
     }
 
-    public RoleDTO findRoleDTOByid(Long roleId){
+    @Override
+    public void update(RoleDTO entity) {
+        //repository.updateROle();
+    }
+
+    @Override
+    public RoleDTO findById(Long roleId){
         return roleRepository.findRoleDTOById(roleId);
     }
 
-    public void deleteRole(Long id){
+    @Override
+    public void delete(Long id){
         roleRepository.deleteById(id);
     }
 }
