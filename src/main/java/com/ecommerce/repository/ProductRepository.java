@@ -11,10 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    @Modifying
-    void deleteProductById(Long id);
-
-    Optional<Product> findProductById(Long id);
 
     @Query(
             "SELECT p.price " +
@@ -27,8 +23,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "SELECT new com.ecommerce.DTO.ProductDTO(" +
                     "p.id, " +
                     "p.name, " +
-                    "p.price) " +
-                    "FROM Product p "
+                    "p.price, " +
+                    "p.isActive) " +
+                    "FROM Product p " +
+                    "WHERE p.isActive = true"
     )
     List<ProductDTO> findAllDTO();
 
@@ -36,9 +34,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "SELECT new com.ecommerce.DTO.ProductDTO(" +
                     "p.id, " +
                     "p.name, " +
-                    "p.price) " +
+                    "p.price, " +
+                    "p.isActive) " +
                     "FROM Product p " +
                     "WHERE p.id = :productId"
     )
     ProductDTO findProductDTOById(@Param("productId") Long productId);
+
+    @Modifying
+    @Query("UPDATE Product p " +
+            "SET p.isActive = false " +
+            "WHERE p.id = :productId")
+    void invalidateProductById(@Param("productId") Long productId);
 }

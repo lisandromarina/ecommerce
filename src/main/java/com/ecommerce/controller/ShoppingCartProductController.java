@@ -1,7 +1,7 @@
 package com.ecommerce.controller;
 
 import com.ecommerce.DTO.ShoppingCartProductDTO;
-import com.ecommerce.service.ShoppingCartProductServiceImpl;
+import com.ecommerce.service.impl.ShoppingCartProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

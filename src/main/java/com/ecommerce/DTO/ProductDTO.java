@@ -10,13 +10,16 @@ public class ProductDTO {
 
     Double price;
 
+    Boolean isActive;
+
     public ProductDTO() {
     }
 
-    public ProductDTO(Long id, String name, Double price) {
+    public ProductDTO(Long id, String name, Double price, Boolean isActive) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.isActive = isActive;
     }
 
     public Long getId() {
@@ -41,5 +44,13 @@ public class ProductDTO {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

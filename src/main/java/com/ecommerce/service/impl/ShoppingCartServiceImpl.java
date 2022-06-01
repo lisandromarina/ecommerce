@@ -1,4 +1,4 @@
-package com.ecommerce.service;
+package com.ecommerce.service.impl;
 
 import com.ecommerce.DTO.ShoppingCartDTO;
 import com.ecommerce.model.ShoppingCart;
@@ -6,6 +6,7 @@ import com.ecommerce.model.User;
 import com.ecommerce.repository.ShoppingCartProductRepository;
 import com.ecommerce.repository.ShoppingCartRepository;
 import com.ecommerce.repository.UserRepository;
+import com.ecommerce.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +51,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     //Delete order by orderId
     @Override
-    public void delete(Long orderId){
+    public void delete(Long orderId) {
         shoppingCartProductRepository.deleteAllByShoppingCartId(orderId);
         shoppingCartRepository.deleteById(orderId);
     }

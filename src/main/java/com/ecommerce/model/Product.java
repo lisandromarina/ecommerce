@@ -1,6 +1,7 @@
 package com.ecommerce.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,13 +13,16 @@ public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "product_id", nullable = false, updatable = false)
-    Long id;
+    private Long id;
 
     @Column(name = "product_name")
-    String name;
+    private String name;
 
     @Column(name = "product_price")
-    Double price;
+    private Double price;
+
+    @Column(name = "product_is_active", columnDefinition = "boolean default true", nullable = false)
+    private Boolean isActive;
 
     public Long getId() {
         return id;
@@ -44,4 +48,11 @@ public class Product implements Serializable {
         this.price = price;
     }
 
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
 }

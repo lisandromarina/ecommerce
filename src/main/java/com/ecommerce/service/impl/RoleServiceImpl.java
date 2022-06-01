@@ -1,8 +1,9 @@
-package com.ecommerce.service;
+package com.ecommerce.service.impl;
 
 import com.ecommerce.DTO.RoleDTO;
 import com.ecommerce.model.Role;
 import com.ecommerce.repository.RoleRepository;
+import com.ecommerce.service.AbmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +12,13 @@ import java.util.List;
 
 @Service
 @Transactional
-public class RoleService implements AbmService<RoleDTO>{
+public class RoleServiceImpl implements AbmService<RoleDTO> {
 
     @Autowired
     RoleRepository roleRepository;
 
     @Override
-    public void save(RoleDTO roleDTO){
+    public void save(RoleDTO roleDTO) {
         Role role = new Role();
         role.setName(roleDTO.getName());
 

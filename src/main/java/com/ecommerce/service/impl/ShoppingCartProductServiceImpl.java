@@ -1,4 +1,4 @@
-package com.ecommerce.service;
+package com.ecommerce.service.impl;
 
 import com.ecommerce.DTO.ShoppingCartDTO;
 import com.ecommerce.DTO.ShoppingCartProductDTO;
@@ -8,6 +8,7 @@ import com.ecommerce.model.ShoppingCartProductPK;
 import com.ecommerce.model.Product;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.repository.ShoppingCartProductRepository;
+import com.ecommerce.service.ShoppingCartProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.util.Set;
 
 @Service
 @Transactional
-public class ShoppingCartProductServiceImpl implements ShoppingCartProductService{
+public class ShoppingCartProductServiceImpl implements ShoppingCartProductService {
 
     @Autowired
     ShoppingCartProductRepository shoppingCartProductRepository;
@@ -64,14 +65,14 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
     //update ShoppingCartProducts for a specific shoppingCart
     @Override
     public void update(ShoppingCartProductDTO shoppingCartProductDTO) {
-            Long idShoppingCart = shoppingCartProductDTO.getIdShoppingCart();
-            Long idProduct = shoppingCartProductDTO.getIdProduct();
+        Long idShoppingCart = shoppingCartProductDTO.getIdShoppingCart();
+        Long idProduct = shoppingCartProductDTO.getIdProduct();
 
-            ShoppingCartProductPK shoppingCartProductPK = createShoppingCartProductPk(idShoppingCart, idProduct);
+        ShoppingCartProductPK shoppingCartProductPK = createShoppingCartProductPk(idShoppingCart, idProduct);
 
-            ShoppingCartProduct shoppingCartProduct = createShoppingCartProduct(shoppingCartProductPK, shoppingCartProductDTO);
+        ShoppingCartProduct shoppingCartProduct = createShoppingCartProduct(shoppingCartProductPK, shoppingCartProductDTO);
 
-            shoppingCartProductRepository.save(shoppingCartProduct);
+        shoppingCartProductRepository.save(shoppingCartProduct);
 
     }
 

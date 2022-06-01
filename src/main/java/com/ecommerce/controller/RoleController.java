@@ -1,9 +1,7 @@
 package com.ecommerce.controller;
 
 import com.ecommerce.DTO.RoleDTO;
-import com.ecommerce.DTO.UserDTO;
-import com.ecommerce.service.RoleService;
-import com.ecommerce.service.UserService;
+import com.ecommerce.service.impl.RoleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,31 +12,31 @@ import java.util.List;
 public class RoleController {
 
     @Autowired
-    RoleService roleService;
+    RoleServiceImpl roleServiceImpl;
 
     @PostMapping("/save")
     public void createRole(@RequestBody RoleDTO roleDTO){
-        roleService.save(roleDTO);
+        roleServiceImpl.save(roleDTO);
     }
 
     @PutMapping("/update")
     public void updateRole(RoleDTO roleDTO){
-        //userService.update(userDTO);
+        //userServiceImpl.update(userDTO);
     }
 
     @GetMapping("/findAll")
     public List<RoleDTO> findAllRole(){
-        return roleService.findAll();
+        return roleServiceImpl.findAll();
     }
 
     @GetMapping("/findById/{roleId}")
     public RoleDTO findRoleDTOById(@PathVariable ("roleId") Long roleId){
-        return roleService.findById(roleId);
+        return roleServiceImpl.findById(roleId);
     }
 
     @DeleteMapping("/delete/{roleId}")
     public void deleteRole(@PathVariable("roleId") Long roleId){
-        roleService.delete(roleId);
+        roleServiceImpl.delete(roleId);
     }
 
 }

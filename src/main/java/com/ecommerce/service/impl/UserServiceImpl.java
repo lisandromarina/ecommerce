@@ -1,19 +1,21 @@
-package com.ecommerce.service;
+package com.ecommerce.service.impl;
 
 import com.ecommerce.DTO.UserDTO;
 import com.ecommerce.model.Role;
 import com.ecommerce.model.User;
 import com.ecommerce.repository.RoleRepository;
 import com.ecommerce.repository.UserRepository;
+import com.ecommerce.service.AbmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @Transactional
-public class UserService implements AbmService<UserDTO>{
+public class UserServiceImpl implements AbmService<UserDTO> {
 
     @Autowired
     UserRepository userRepository;
@@ -21,7 +23,7 @@ public class UserService implements AbmService<UserDTO>{
     @Autowired
     RoleRepository roleRepository;
 
-    public void save(UserDTO userDTO){
+    public void save(UserDTO userDTO) {
         User user = new User();
 
         user.setFirstName(userDTO.getFirstName());
@@ -36,22 +38,22 @@ public class UserService implements AbmService<UserDTO>{
     }
 
     @Override
-    public void update(UserDTO userDTO){
+    public void update(UserDTO userDTO) {
         //userService.createUser(userDTO);
     }
 
     @Override
-    public List<UserDTO> findAll(){
+    public List<UserDTO> findAll() {
         return userRepository.findAllUsers();
     }
 
     @Override
-    public UserDTO findById(Long userId){
+    public UserDTO findById(Long userId) {
         return userRepository.findUserDTOById(userId);
     }
 
     @Override
-    public void delete(Long userId){
+    public void delete(Long userId) {
         userRepository.deleteById(userId);
     }
 }
