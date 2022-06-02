@@ -25,13 +25,6 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
     @Autowired
     ProductRepository productRepository;
 
-    //Create an ShoppingCart from ShoppingCartDTO
-    private ShoppingCart createShoppingCartFromDTO(ShoppingCartDTO shoppingCartDTO) {
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setId(shoppingCartDTO.getId());
-        return shoppingCart;
-    }
-
     //Create an ShoppingCartProductPk
     private ShoppingCartProductPK createShoppingCartProductPk(Long idShoppingCart, Long idProduct) {
         ShoppingCartProductPK shoppingCartProductPK = new ShoppingCartProductPK();
