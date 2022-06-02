@@ -26,6 +26,7 @@ public class ProductService implements AbmService<ProductDTO> {
         Product product = new Product();
         product.setName(productDTO.getName());
         product.setPrice(productDTO.getPrice());
+        product.setActive(Boolean.TRUE);
 
         try {
             productRepository.save(product);
@@ -51,6 +52,7 @@ public class ProductService implements AbmService<ProductDTO> {
 
     @Override
     public ProductDTO findById(Long id) {
+        validateProductExist(id);
         try {
             return productRepository.findProductDTOById(id);
         } catch (Exception e) {
@@ -71,7 +73,7 @@ public class ProductService implements AbmService<ProductDTO> {
     private void validateProductExist(Long id) {
         if (!productRepository.existsById(id)) {
             throw new ApiRequestException("The product with id: " + id + " doesn't exist",
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.NOT_FOUND);
         }
     }
 

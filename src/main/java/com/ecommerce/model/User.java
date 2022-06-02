@@ -31,6 +31,9 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @Column(name = "user_is_active", nullable = false)
+    private Boolean isActive;
+
     public Long getId() {
         return id;
     }
@@ -77,5 +80,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

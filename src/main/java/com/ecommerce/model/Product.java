@@ -21,7 +21,7 @@ public class Product implements Serializable {
     @Column(name = "product_price")
     private Double price;
 
-    @Column(name = "product_is_active", columnDefinition = "boolean default true", nullable = false)
+    @Column(name = "product_is_active", nullable = false)
     private Boolean isActive;
 
     public Long getId() {

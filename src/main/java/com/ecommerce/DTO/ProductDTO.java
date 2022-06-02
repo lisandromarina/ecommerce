@@ -4,13 +4,13 @@ import javax.persistence.Column;
 
 public class ProductDTO {
 
-    Long id;
+    private Long id;
 
-    String name;
+    private String name;
 
-    Double price;
+    private Double price;
 
-    Boolean isActive;
+    private Boolean isActive;
 
     public ProductDTO() {
     }
