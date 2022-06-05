@@ -31,7 +31,7 @@ public interface ShoppingCartProductRepository extends JpaRepository<ShoppingCar
                     "WHERE scp.pk.shoppingCart.id = :shoppingCartId " +
                     "AND scp.pk.product.id = :productId"
     )
-    void deleteByShoppingCartIdAndShoppingCartProductId(@Param("shoppingCartId") Long shoppingCartId,
+    void deleteByShoppingCartIdAndProductId(@Param("shoppingCartId") Long shoppingCartId,
                                                         @Param("productId") Long productId);
 
     @Modifying
