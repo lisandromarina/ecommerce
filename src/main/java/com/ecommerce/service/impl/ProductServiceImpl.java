@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class ProductService implements AbmService<ProductDTO> {
+public class ProductServiceImpl implements AbmService<ProductDTO> {
 
     @Autowired
     ProductRepository productRepository;

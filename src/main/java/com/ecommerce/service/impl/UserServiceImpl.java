@@ -4,7 +4,6 @@ import com.ecommerce.DTO.UserDTO;
 import com.ecommerce.exception.ApiRequestException;
 import com.ecommerce.model.Role;
 import com.ecommerce.model.User;
-import com.ecommerce.repository.RoleRepository;
 import com.ecommerce.repository.UserRepository;
 import com.ecommerce.service.AbmService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,8 @@ public class UserServiceImpl implements AbmService<UserDTO> {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    RoleRepository roleRepository;
+    //@Autowired
+    //RoleRepository roleRepository;
 
     public void save(UserDTO userDTO) {
         validateUserFields(userDTO);
@@ -34,10 +33,9 @@ public class UserServiceImpl implements AbmService<UserDTO> {
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
         user.setDateCreated(LocalDate.now());
+        user.setRole(userDTO.getRole());
         user.setActive(true);
 
-        Role role = getRoleById(userDTO.getRoleId());
-        user.setRole(role);
         try {
             userRepository.save(user);
         } catch (Exception e) {
@@ -86,23 +84,12 @@ public class UserServiceImpl implements AbmService<UserDTO> {
                 || userDTO.getLastName().isEmpty()
                 || userDTO.getEmail() == null
                 || userDTO.getEmail().isEmpty()
-                || userDTO.getRoleId() == null){
+                || userDTO.getRole() == null){
             throw new ApiRequestException("The User cannot have empty fields", HttpStatus.BAD_REQUEST);
         }
     }
 
-    private Role getRoleById(Long idRole) {
-        Optional<Role> role;
-        try {
-            role = roleRepository.findById(idRole);
-            if (!role.isPresent()) {
-                throw new ApiRequestException("Cannot create user, role with id: " + idRole + " not found", HttpStatus.NOT_FOUND);
-            }
-            return role.get();
-        } catch (Exception e) {
-            throw new ApiRequestException(e.getMessage(), e);
-        }
-    }
+
 
     private void validateUserExist(Long id) {
         if (!userRepository.existsById(id)) {

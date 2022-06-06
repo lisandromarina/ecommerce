@@ -14,21 +14,28 @@ public class UserDTO {
     private String lastName;
     private LocalDate dateCreated;
     private String email;
-    private Long roleId;
-    private String roleName;
+    private Role role;
 
     public UserDTO() {
     }
 
     public UserDTO(Long id, String firstName, String lastName, LocalDate dateCreated,
-                   String email, Long roleId, String roleName) {
+                   String email, Role role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateCreated = dateCreated;
         this.email = email;
-        this.roleId = roleId;
-        this.roleName = roleName;
+        this.role = role;
+    }
+
+    public UserDTO(Long id, String firstName, String lastName, LocalDate dateCreated,
+                   String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateCreated = dateCreated;
+        this.email = email;
     }
 
     public UserDTO(Long id, String firstName, String lastName) {
@@ -77,20 +84,12 @@ public class UserDTO {
         this.email = email;
     }
 
-    public Long getRoleId() {
-        return roleId;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setRole(Role roleName) {
+        this.role = roleName;
     }
 
 }

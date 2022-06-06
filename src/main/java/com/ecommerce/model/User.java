@@ -27,8 +27,8 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "role_id")
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Column(name = "user_is_active", nullable = false)
