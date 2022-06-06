@@ -10,15 +10,18 @@ public class ProductDTO {
 
     private Double price;
 
+    private String description;
+
     private Boolean isActive;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(Long id, String name, Double price, Boolean isActive) {
+    public ProductDTO(Long id, String name, Double price, String description, Boolean isActive) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.description = description;
         this.isActive = isActive;
     }
 
@@ -40,6 +43,14 @@ public class ProductDTO {
 
     public Double getPrice() {
         return price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setPrice(Double price) {

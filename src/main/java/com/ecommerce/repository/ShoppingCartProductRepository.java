@@ -41,6 +41,4 @@ public interface ShoppingCartProductRepository extends JpaRepository<ShoppingCar
                     "WHERE scp.pk.shoppingCart.id = :shoppingCartId "
     )
     void deleteAllByShoppingCartId(@Param("shoppingCartId") Long shoppingCartId);
-
-
 }

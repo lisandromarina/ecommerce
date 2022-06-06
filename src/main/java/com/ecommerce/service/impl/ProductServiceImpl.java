@@ -26,6 +26,7 @@ public class ProductServiceImpl implements AbmService<ProductDTO> {
         Product product = new Product();
         product.setName(productDTO.getName());
         product.setPrice(productDTO.getPrice());
+        product.setDescription(productDTO.getDescription());
         product.setActive(Boolean.TRUE);
 
         try {
@@ -80,6 +81,8 @@ public class ProductServiceImpl implements AbmService<ProductDTO> {
     private void validateInvalidProductFields(ProductDTO productDTO) {
         if (productDTO.getName() == null
                 || productDTO.getName().isEmpty()
+                || productDTO.getDescription() == null
+                || productDTO.getDescription().isEmpty()
                 || productDTO.getPrice() == null
                 || productDTO.getName().isEmpty()) {
             throw new ApiRequestException("The product cannot have empty fields", HttpStatus.BAD_REQUEST);

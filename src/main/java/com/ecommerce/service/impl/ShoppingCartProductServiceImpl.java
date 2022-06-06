@@ -57,7 +57,6 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
-
     }
 
     //return all orderProducts for an Order

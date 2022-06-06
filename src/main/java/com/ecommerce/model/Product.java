@@ -21,6 +21,9 @@ public class Product implements Serializable {
     @Column(name = "product_price")
     private Double price;
 
+    @Column(name = "product_description")
+    private String description;
+
     @Column(name = "product_is_active", nullable = false)
     private Boolean isActive;
 
@@ -54,5 +57,13 @@ public class Product implements Serializable {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
