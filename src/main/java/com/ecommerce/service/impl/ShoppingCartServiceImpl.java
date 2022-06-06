@@ -34,6 +34,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public void create(Long userId) {
         validateUserExist(userId);
+
         User user = getUserById(userId);
 
         ShoppingCart shoppingCart = new ShoppingCart();

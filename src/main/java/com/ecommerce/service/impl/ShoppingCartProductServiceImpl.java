@@ -43,7 +43,7 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
 
         try {
             shoppingCartProductRepository.save(shoppingCartProduct);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
     }
@@ -54,7 +54,7 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
         try {
             shoppingCartProductRepository
                     .deleteByShoppingCartIdAndProductId(shoppingCartId, productId);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
 
@@ -75,12 +75,10 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
             if (!productRepository.existsById(idProduct)) {
                 throw new ApiRequestException("Cannot create ShoppingCartProduct, Product with id: " + idProduct + " doesn't exist",
                         HttpStatus.NOT_FOUND);
-            }
-            if (!shoppingCartRepository.existsById(idShoppingCart)) {
+            } else if (!shoppingCartRepository.existsById(idShoppingCart)) {
                 throw new ApiRequestException("Cannot create ShoppingCartProduct, Shopping Cart with id: " + idShoppingCart + " doesn't exist",
                         HttpStatus.NOT_FOUND);
-            }
-            if(quantity <= 0){
+            } else if (quantity <= 0) {
                 throw new ApiRequestException("Quantity cannot be 0",
                         HttpStatus.BAD_REQUEST);
             }
@@ -89,13 +87,13 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
         }
     }
 
-    private void validateShoppingCartId(Long idShoppingCart){
+    private void validateShoppingCartId(Long idShoppingCart) {
         try {
-            if(!shoppingCartRepository.existsById(idShoppingCart)){
+            if (!shoppingCartRepository.existsById(idShoppingCart)) {
                 throw new ApiRequestException("Shopping Cart with id: " + idShoppingCart + " doesn't exist",
                         HttpStatus.NOT_FOUND);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
     }
@@ -126,7 +124,7 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
         try {
             Double sellPrice = productRepository.findPriceById(shoppingCartProductPK.getProduct().getId());
             shoppingCartProduct.setSellPrice(sellPrice);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
 
