@@ -11,9 +11,6 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Modifying
-    void deleteUserById(Long id);
-
     @Query(
             "SELECT new com.ecommerce.DTO.UserDTO(" +
                     "u.id, " +
@@ -21,10 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
                     "u.lastName, " +
                     "u.dateCreated, " +
                     "u.email, " +
-                    "r.id, " +
-                    "r.name) " +
-                    "FROM User u " +
-                    "INNER JOIN Role r ON (u.role.id = r.id)"
+                    "u.role) " +
+                    "FROM User u "
     )
     List<UserDTO> findAllUsers();
 
@@ -35,11 +30,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
                     "u.lastName, " +
                     "u.dateCreated, " +
                     "u.email, " +
-                    "r.id, " +
-                    "r.name) " +
+                    "u.role) " +
                     "FROM User u " +
-                    "INNER JOIN Role r ON (u.role.id = r.id) " +
                     "WHERE u.id = :userId"
     )
     UserDTO findUserDTOById(@Param("userId") Long userId);
+
+    @Modifying
+    @Query("UPDATE User u " +
+            "SET u.isActive = false " +
+            "WHERE u.id = :userId")
+    void invalidateProductById(@Param("userId") Long userId);
 }

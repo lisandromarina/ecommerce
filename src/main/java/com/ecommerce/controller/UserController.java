@@ -1,7 +1,7 @@
 package com.ecommerce.controller;
 
 import com.ecommerce.DTO.UserDTO;
-import com.ecommerce.service.UserService;
+import com.ecommerce.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,30 +12,30 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userServiceImpl;
 
     @PostMapping("/create")
-    public void createUser(@RequestBody UserDTO userDTO){
-        userService.createUser(userDTO);
+    public void createUser(@RequestBody UserDTO userDTO) {
+        userServiceImpl.save(userDTO);
     }
 
     @PutMapping("/update")
-    public void updateUser(UserDTO userDTO){
-        //userService.createUser(userDTO);
+    public void updateUser(UserDTO userDTO) {
+        //userServiceImpl.create(userDTO);
     }
 
     @GetMapping("/findAll")
-    public List<UserDTO> findAllUser(){
-        return userService.findAllUser();
+    public List<UserDTO> findAllUser() {
+        return userServiceImpl.findAll();
     }
 
     @GetMapping("/findById/{userId}")
-    public UserDTO findUserById(@PathVariable ("userId") Long userId){
-        return userService.findUserById(userId);
+    public UserDTO findUserById(@PathVariable("userId") Long userId) {
+        return userServiceImpl.findById(userId);
     }
 
     @DeleteMapping("/delete/{userId}")
-    public void deleteUser(@PathVariable("userId") Long userId){
-        userService.deleteUser(userId);
+    public void deleteUser(@PathVariable("userId") Long userId) {
+        userServiceImpl.delete(userId);
     }
 }

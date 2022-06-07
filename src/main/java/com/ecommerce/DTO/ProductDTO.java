@@ -4,19 +4,25 @@ import javax.persistence.Column;
 
 public class ProductDTO {
 
-    Long id;
+    private Long id;
 
-    String name;
+    private String name;
 
-    Double price;
+    private Double price;
+
+    private String description;
+
+    private Boolean isActive;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(Long id, String name, Double price) {
+    public ProductDTO(Long id, String name, Double price, String description, Boolean isActive) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.description = description;
+        this.isActive = isActive;
     }
 
     public Long getId() {
@@ -39,7 +45,23 @@ public class ProductDTO {
         return price;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }
