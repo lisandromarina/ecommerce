@@ -59,10 +59,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         validateShoppingCartExist(id);
         try {
             return shoppingCartRepository.findShoppingCartDTOById(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
-
     }
 
     //Delete order by orderId

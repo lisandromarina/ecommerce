@@ -30,9 +30,9 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
     @Autowired
     ProductRepository productRepository;
 
-    //update ShoppingCartProducts for a specific shoppingCart
+    //create ShoppingCartProducts for a specific shoppingCart
     @Override
-    public void update(ShoppingCartProductDTO shoppingCartProductDTO) {
+    public void create(ShoppingCartProductDTO shoppingCartProductDTO) {
         validateShoppingCartProductFields(shoppingCartProductDTO);
 
         Long idShoppingCart = shoppingCartProductDTO.getIdShoppingCart();
@@ -126,7 +126,6 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
-
         return shoppingCartProduct;
     }
 }

@@ -12,9 +12,9 @@ public class ShoppingCartProductController {
     @Autowired
     ShoppingCartProductServiceImpl shoppingCartProductServiceImpl;
 
-    @PutMapping("/update")
-    public void updateShoppingCartProduct(@RequestBody ShoppingCartProductDTO shoppingCartProductDTO) {
-        shoppingCartProductServiceImpl.update(shoppingCartProductDTO);
+    @PostMapping("/create")
+    public void createShoppingCartProduct(@RequestBody ShoppingCartProductDTO shoppingCartProductDTO) {
+        shoppingCartProductServiceImpl.create(shoppingCartProductDTO);
     }
 
     @DeleteMapping("/delete/{shoppingCartId}/{productId}")

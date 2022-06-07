@@ -6,7 +6,7 @@ import java.util.Set;
 
 public interface ShoppingCartProductService {
 
-    void update(ShoppingCartProductDTO shoppingCartProductDTO);
+    void create(ShoppingCartProductDTO shoppingCartProductDTO);
 
     void delete(Long shoppingCartId, Long productId);
 
