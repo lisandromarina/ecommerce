@@ -40,5 +40,20 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User u " +
             "SET u.isActive = false " +
             "WHERE u.id = :userId")
-    void invalidateProductById(@Param("userId") Long userId);
+    void invalidateUserById(@Param("userId") Long userId);
+
+    @Query(
+            "SELECT new com.ecommerce.DTO.UserDTO(" +
+                    "u.id, " +
+                    "u.firstName, " +
+                    "u.lastName, " +
+                    "u.dateCreated, " +
+                    "u.email, " +
+                    "u.role) " +
+                    "FROM User u " +
+                    "WHERE u.email = :email " +
+                    "AND u.isActive = true"
+    )
+    UserDTO login(@Param("email") String email);
+
 }

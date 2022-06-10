@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class UserController {
 
     @Autowired
@@ -37,5 +38,10 @@ public class UserController {
     @DeleteMapping("/delete/{userId}")
     public void deleteUser(@PathVariable("userId") Long userId) {
         userServiceImpl.delete(userId);
+    }
+
+    @GetMapping("/login/{userEmail}")
+    public UserDTO login(@PathVariable("userEmail") String userEmail) {
+        return userServiceImpl.login(userEmail);
     }
 }

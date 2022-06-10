@@ -2,7 +2,6 @@ package com.ecommerce.service.impl;
 
 import com.ecommerce.DTO.UserDTO;
 import com.ecommerce.exception.ApiRequestException;
-import com.ecommerce.model.Role;
 import com.ecommerce.model.User;
 import com.ecommerce.repository.UserRepository;
 import com.ecommerce.service.AbmService;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -21,9 +19,6 @@ public class UserServiceImpl implements AbmService<UserDTO> {
 
     @Autowired
     UserRepository userRepository;
-
-    //@Autowired
-    //RoleRepository roleRepository;
 
     public void save(UserDTO userDTO) {
         validateUserFields(userDTO);
@@ -71,10 +66,14 @@ public class UserServiceImpl implements AbmService<UserDTO> {
     public void delete(Long userId) {
         validateUserExist(userId);
         try{
-            userRepository.invalidateProductById(userId);
+            userRepository.invalidateUserById(userId);
         }catch (Exception e){
             throw new ApiRequestException(e.getMessage(), e);
         }
+    }
+
+    public UserDTO login(String email){
+        return userRepository.login(email);
     }
 
     private void validateUserFields(UserDTO userDTO) {
