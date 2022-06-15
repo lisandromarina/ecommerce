@@ -15,11 +15,6 @@ public class UserController {
     @Autowired
     UserServiceImpl userServiceImpl;
 
-    @PostMapping("/create")
-    public void createUser(@RequestBody UserDTO userDTO) {
-        userServiceImpl.save(userDTO);
-    }
-
     @PutMapping("/update")
     public void updateUser(UserDTO userDTO) {
         //userServiceImpl.create(userDTO);
@@ -40,8 +35,4 @@ public class UserController {
         userServiceImpl.delete(userId);
     }
 
-    @GetMapping("/login/{userEmail}")
-    public String login(@PathVariable("userEmail") String userEmail) {
-        return userServiceImpl.login(userEmail);
-    }
 }

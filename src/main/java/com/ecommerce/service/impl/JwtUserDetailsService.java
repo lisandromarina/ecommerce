@@ -1,4 +1,4 @@
-package com.ecommerce.service;
+package com.ecommerce.service.impl;
 import com.ecommerce.DTO.UserDTO;
 import com.ecommerce.model.Role;
 import com.ecommerce.repository.UserRepository;
@@ -24,7 +24,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDTO userDTO = userRepository.findUserByUsername(username);
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority("USER_ROLE"));
+        authorityList.add(new SimpleGrantedAuthority(userDTO.getRole().toString()));
         return new User(userDTO.getUsername(), userDTO.getPassword(), authorityList);
     }
 
