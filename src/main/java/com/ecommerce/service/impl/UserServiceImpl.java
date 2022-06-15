@@ -138,6 +138,12 @@ public class UserServiceImpl implements UserService {
                 || userDTO.getRole() == null){
             throw new ApiRequestException("The User cannot have empty fields", HttpStatus.BAD_REQUEST);
         }
+        if(userRepository.existsByUsername(userDTO.getUsername())){
+            throw new ApiRequestException("Username arleady exist!", HttpStatus.BAD_REQUEST);
+        }
+        if(userRepository.existsByEmail(userDTO.getEmail())){
+            throw new ApiRequestException("Email arleady exist!", HttpStatus.BAD_REQUEST);
+        }
     }
 
     private void validateUserExist(Long id) {
