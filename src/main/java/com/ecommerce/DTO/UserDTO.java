@@ -10,23 +10,38 @@ import java.time.LocalDate;
 
 public class UserDTO {
     private Long id;
+    private String username;
     private String firstName;
     private String lastName;
     private LocalDate dateCreated;
     private String email;
     private Role role;
+    private String password;
 
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String firstName, String lastName, LocalDate dateCreated,
+    public UserDTO(Long id, String username, String firstName, String lastName, LocalDate dateCreated,
                    String email, Role role) {
         this.id = id;
+        this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateCreated = dateCreated;
         this.email = email;
         this.role = role;
+    }
+
+    public UserDTO(Long id, String username, String firstName, String lastName, LocalDate dateCreated,
+                   String email, Role role, String password) {
+        this.id = id;
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateCreated = dateCreated;
+        this.email = email;
+        this.role = role;
+        this.password = password;
     }
 
     public UserDTO(Long id, String firstName, String lastName, LocalDate dateCreated,
@@ -42,6 +57,11 @@ public class UserDTO {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public UserDTO(String username, String password){
+        this.username = username;
+        this.password = password;
     }
 
     public Long getId() {
@@ -92,4 +112,19 @@ public class UserDTO {
         this.role = roleName;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

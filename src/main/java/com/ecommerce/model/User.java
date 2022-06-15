@@ -14,6 +14,9 @@ public class User {
     @Column(name = "user_id", nullable = false)
     private Long id;
 
+    @Column(name = "user_username", nullable = false)
+    private String username;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -26,6 +29,9 @@ public class User {
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -88,5 +94,21 @@ public class User {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

@@ -13,7 +13,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(
             "SELECT new com.ecommerce.DTO.UserDTO(" +
-                    "u.id, " +
+                    "u.id," +
+                    "u.username, " +
                     "u.firstName, " +
                     "u.lastName, " +
                     "u.dateCreated, " +
@@ -25,7 +26,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(
             "SELECT new com.ecommerce.DTO.UserDTO(" +
-                    "u.id, " +
+                    "u.id," +
+                    "u.username, " +
                     "u.firstName, " +
                     "u.lastName, " +
                     "u.dateCreated, " +
@@ -44,16 +46,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(
             "SELECT new com.ecommerce.DTO.UserDTO(" +
-                    "u.id, " +
+                    "u.id," +
+                    "u.username, " +
                     "u.firstName, " +
                     "u.lastName, " +
                     "u.dateCreated, " +
                     "u.email, " +
-                    "u.role) " +
+                    "u.role, " +
+                    "u.password) " +
                     "FROM User u " +
-                    "WHERE u.email = :email " +
+                    "WHERE u.username = :username " +
                     "AND u.isActive = true"
     )
-    UserDTO login(@Param("email") String email);
+    UserDTO findUserByUsername(@Param("username") String username);
 
 }

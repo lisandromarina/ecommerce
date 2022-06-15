@@ -7,7 +7,9 @@ import com.ecommerce.repository.UserRepository;
 import com.ecommerce.service.AbmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -72,8 +74,11 @@ public class UserServiceImpl implements AbmService<UserDTO> {
         }
     }
 
-    public UserDTO login(String email){
-        return userRepository.login(email);
+    public String login(String email){
+        Authentication authentication = SecurityContextHolder
+                .getContext().getAuthentication();
+        String username = authentication.getName();
+        return username;
     }
 
     private void validateUserFields(UserDTO userDTO) {

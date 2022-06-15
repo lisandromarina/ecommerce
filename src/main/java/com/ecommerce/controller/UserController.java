@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @GetMapping("/login/{userEmail}")
-    public UserDTO login(@PathVariable("userEmail") String userEmail) {
+    public String login(@PathVariable("userEmail") String userEmail) {
         return userServiceImpl.login(userEmail);
     }
 }
