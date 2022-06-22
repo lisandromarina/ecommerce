@@ -2,6 +2,7 @@ package com.ecommerce.controller;
 
 import com.ecommerce.DTO.ShoppingCartDTO;
 import com.ecommerce.DTO.ShoppingCartProductDTO;
+import com.ecommerce.service.ShoppingCartService;
 import com.ecommerce.service.impl.ShoppingCartProductServiceImpl;
 import com.ecommerce.service.impl.ShoppingCartServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,11 @@ public class ShoppingCartController {
 
     @GetMapping("/findById/{id}")
     public ShoppingCartDTO findShoppingCartById(@PathVariable("id") Long id) {
-        ShoppingCartDTO shoppingCartDTO = shoppingCartServiceImpl.findById(id);
+       return shoppingCartServiceImpl.findById(id);
+    }
 
-        Set<ShoppingCartProductDTO> shoppingCartProductDTO = shoppingCartProductServiceImpl
-                .findByShoppingCartId(id);
-        shoppingCartDTO.setShoppingCartProductsDTO(shoppingCartProductDTO);
-
-        return shoppingCartDTO;
+    @GetMapping("/findByUserId/{userId}")
+    public ShoppingCartDTO findShoppingCartByUserId(@PathVariable("userId") Long userId) {
+        return shoppingCartServiceImpl.findByUserId(userId);
     }
 }

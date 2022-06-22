@@ -11,5 +11,7 @@ public interface ShoppingCartService {
 
     ShoppingCartDTO findById(Long shoppingCartId);
 
+    ShoppingCartDTO findByUserId(Long userId);
     void delete(Long shoppingCartId);
+
 }
