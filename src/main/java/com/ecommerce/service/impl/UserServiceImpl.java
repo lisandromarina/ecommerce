@@ -54,15 +54,16 @@ public class UserServiceImpl implements UserService {
         user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
         user.setRole(Role.USER);
 
-        Map<String, Object> responseMap = new HashMap<>();
-        UserDetails userDetails = userDetailsService.createUserDetails(user.getUsername(), user.getPassword());
-        String token = jwtTokenUtil.generateToken(userDetails);
         try {
-            userRepository.save(user);
+            Long userId = userRepository.save(user).getId();
+            userDTO.setId(userId);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
 
+        String token = jwtTokenUtil.generateToken(userDTO);
+
+        Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("username", user.getUsername());
         responseMap.put("message", "Account created successfully");
         responseMap.put("token", token);
@@ -80,8 +81,8 @@ public class UserServiceImpl implements UserService {
 
             Authentication auth = authenticationManager.authenticate(authenticationToken);
             if (auth.isAuthenticated()) {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                String token = jwtTokenUtil.generateToken(userDetails);
+                UserDTO user = userRepository.findUserByUsername(username);
+                String token = jwtTokenUtil.generateToken(user);
                 responseMap.put("error", false);
                 responseMap.put("message", "Logged In");
                 responseMap.put("token", token);
@@ -135,7 +136,8 @@ public class UserServiceImpl implements UserService {
                 || userDTO.getLastName().isEmpty()
                 || userDTO.getEmail() == null
                 || userDTO.getEmail().isEmpty()
-                || userDTO.getRole() == null){
+                || userDTO.getPassword() == null
+                || userDTO.getPassword().isEmpty()){
             throw new ApiRequestException("The User cannot have empty fields", HttpStatus.BAD_REQUEST);
         }
         if(userRepository.existsByUsername(userDTO.getUsername())){

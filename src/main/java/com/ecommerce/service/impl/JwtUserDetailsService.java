@@ -27,10 +27,4 @@ public class JwtUserDetailsService implements UserDetailsService {
         authorityList.add(new SimpleGrantedAuthority(userDTO.getRole().toString()));
         return new User(userDTO.getUsername(), userDTO.getPassword(), authorityList);
     }
-
-    public UserDetails createUserDetails(String username, String password) {
-        List<GrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority("USER"));
-        return new User(username, password, authorityList);
-    }
 }
