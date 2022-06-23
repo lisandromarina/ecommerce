@@ -11,7 +11,8 @@ public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long
     @Query(
             "SELECT new com.ecommerce.DTO.ShoppingCartDTO(" +
                     "sc.id, " +
-                    "sc.dateCreated) " +
+                    "sc.dateCreated, " +
+                    "isComplete) " +
                     "FROM ShoppingCart sc " +
                     "WHERE sc.id = :id"
     )
@@ -20,9 +21,16 @@ public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long
     @Query(
             "SELECT new com.ecommerce.DTO.ShoppingCartDTO(" +
                     "sc.id, " +
-                    "sc.dateCreated) " +
+                    "sc.dateCreated, " +
+                    "sc.isComplete) " +
                     "FROM ShoppingCart sc " +
                     "WHERE sc.user.id = :userId"
     )
     ShoppingCartDTO findByUserId(@Param("userId") Long userId);
+
+    @Query(
+            "SELECT CASE WHEN COUNT(sc) > 0 THEN true ELSE false END " +
+                    "FROM ShoppingCart sc WHERE sc.user.id = :userId"
+    )
+    Boolean existsByUserId(@Param("userId") Long userId);
 }

@@ -20,6 +20,9 @@ public class ShoppingCart implements Serializable {
     @Column(name = "date_created")
     private LocalDate dateCreated;
 
+    @Column(name = "is_complete")
+    private Boolean isComplete;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
@@ -54,5 +57,13 @@ public class ShoppingCart implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Boolean getComplete() {
+        return isComplete;
+    }
+
+    public void setComplete(Boolean complete) {
+        isComplete = complete;
     }
 }

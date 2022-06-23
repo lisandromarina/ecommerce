@@ -17,14 +17,6 @@ public class ShoppingCartController {
     @Autowired
     ShoppingCartServiceImpl shoppingCartServiceImpl;
 
-    @Autowired
-    ShoppingCartProductServiceImpl shoppingCartProductServiceImpl;
-
-    @PostMapping("/create/{userId}")
-    public void createShoppingCart(@PathVariable("userId") Long userId) {
-        shoppingCartServiceImpl.create(userId);
-    }
-
     @DeleteMapping("/delete/{id}")
     public void deleteShoppingCart(@PathVariable("id") Long id) {
         shoppingCartServiceImpl.delete(id);

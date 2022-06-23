@@ -32,24 +32,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Autowired
     UserRepository userRepository;
 
-    //Save an order in the database
-    @Override
-    public void create(Long userId) {
-        validateUserExist(userId);
-
-        User user = getUserById(userId);
-
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setDateCreated(LocalDate.now());
-
-        try {
-            shoppingCart.setUser(user);
-            shoppingCartRepository.save(shoppingCart);
-        } catch (Exception e) {
-            throw new ApiRequestException(e.getMessage(), e);
-        }
-    }
-
     @Override
     public void update(ShoppingCart shoppingCart) {
         shoppingCartRepository.save(shoppingCart);
@@ -73,7 +55,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     //Delete order by orderId
-    @Override
     public void delete(Long orderId) {
         try {
             shoppingCartProductRepository.deleteAllByShoppingCartId(orderId);
