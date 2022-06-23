@@ -14,7 +14,7 @@ public class ShoppingCartProductController {
 
     @PostMapping("/create")
     public void createShoppingCartProduct(@RequestBody ShoppingCartProductDTO shoppingCartProductDTO) {
-        shoppingCartProductServiceImpl.create(shoppingCartProductDTO);
+        shoppingCartProductServiceImpl.createOrUpdate(shoppingCartProductDTO);
     }
 
     @DeleteMapping("/delete/{shoppingCartId}/{productId}")
@@ -22,4 +22,5 @@ public class ShoppingCartProductController {
                                           @PathVariable("productId") Long productId) {
         shoppingCartProductServiceImpl.delete(shoppingCartId, productId);
     }
+
 }

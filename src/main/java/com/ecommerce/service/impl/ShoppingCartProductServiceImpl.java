@@ -1,20 +1,21 @@
 package com.ecommerce.service.impl;
 
+import com.ecommerce.DTO.ShoppingCartDTO;
 import com.ecommerce.DTO.ShoppingCartProductDTO;
 import com.ecommerce.exception.ApiRequestException;
-import com.ecommerce.model.ShoppingCart;
-import com.ecommerce.model.ShoppingCartProduct;
-import com.ecommerce.model.ShoppingCartProductPK;
-import com.ecommerce.model.Product;
+import com.ecommerce.model.*;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.repository.ShoppingCartProductRepository;
 import com.ecommerce.repository.ShoppingCartRepository;
+import com.ecommerce.repository.UserRepository;
 import com.ecommerce.service.ShoppingCartProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -28,21 +29,28 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
     ShoppingCartRepository shoppingCartRepository;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     ProductRepository productRepository;
 
     //create ShoppingCartProducts for a specific shoppingCart
     @Override
-    public void create(ShoppingCartProductDTO shoppingCartProductDTO) {
+    public void createOrUpdate(ShoppingCartProductDTO shoppingCartProductDTO) {
         validateShoppingCartProductFields(shoppingCartProductDTO);
 
-        Long idShoppingCart = shoppingCartProductDTO.getIdShoppingCart();
-        Long idProduct = shoppingCartProductDTO.getIdProduct();
-        ShoppingCartProductPK shoppingCartProductPK = createShoppingCartProductPk(idShoppingCart, idProduct);
-
-        ShoppingCartProduct shoppingCartProduct = createShoppingCartProduct(shoppingCartProductPK, shoppingCartProductDTO);
-
         try {
-            shoppingCartProductRepository.save(shoppingCartProduct);
+            Long userId = shoppingCartProductDTO.getUserId();
+            ShoppingCartDTO shoppingCartDTO = shoppingCartRepository.findByUserId(userId);
+
+            Long idShoppingCart;
+            if (shoppingCartDTO == null) {
+                idShoppingCart = createShoppingCart(userId);
+            } else {
+                idShoppingCart = shoppingCartDTO.getId();
+            }
+
+            createShoppingCartProduct(shoppingCartProductDTO, idShoppingCart);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
@@ -54,6 +62,10 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
         try {
             shoppingCartProductRepository
                     .deleteByShoppingCartIdAndProductId(shoppingCartId, productId);
+
+            if(shoppingCartProductRepository.isEmptyShoppingCart(shoppingCartId)){
+                shoppingCartRepository.deleteById(shoppingCartId);
+            }
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
@@ -66,16 +78,44 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
         return shoppingCartProductRepository.findShoppingCartProductByShoppingCartId(idShoppingCart);
     }
 
+    private void createShoppingCartProduct(ShoppingCartProductDTO shoppingCartProductDTO, Long idShoppingCart) {
+        Long idProduct = shoppingCartProductDTO.getIdProduct();
+        ShoppingCartProductPK shoppingCartProductPK = createShoppingCartProductPk(idShoppingCart, idProduct);
+        //VALIDAR SI EL CARRITO NO TIENE PRODUCTOS, LO ELIMINO
+        ShoppingCartProduct shoppingCartProduct = createShoppingCartProduct(shoppingCartProductPK, shoppingCartProductDTO);
+
+        try {
+            shoppingCartProductRepository.save(shoppingCartProduct);
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage(), e);
+        }
+    }
+
+    private Long createShoppingCart(Long userId) {
+        User user = getUserById(userId);
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setDateCreated(LocalDate.now());
+        shoppingCart.setComplete(false);
+
+        try {
+            shoppingCart.setUser(user);
+            return shoppingCartRepository.save(shoppingCart).getId();
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage(), e);
+        }
+    }
+
     private void validateShoppingCartProductFields(ShoppingCartProductDTO shoppingCartProductDTO) {
-        Long idShoppingCart = shoppingCartProductDTO.getIdShoppingCart();
+        Long idUser = shoppingCartProductDTO.getUserId();
         Long idProduct = shoppingCartProductDTO.getIdProduct();
         Integer quantity = shoppingCartProductDTO.getQuantity();
         try {
             if (!productRepository.existsById(idProduct)) {
                 throw new ApiRequestException("Cannot create ShoppingCartProduct, Product with id: " + idProduct + " doesn't exist",
                         HttpStatus.NOT_FOUND);
-            } else if (!shoppingCartRepository.existsById(idShoppingCart)) {
-                throw new ApiRequestException("Cannot create ShoppingCartProduct, Shopping Cart with id: " + idShoppingCart + " doesn't exist",
+            } else if (!userRepository.existsById(idUser)) {
+                throw new ApiRequestException("Cannot create ShoppingCartProduct, User with id: " + idUser + " doesn't exist",
                         HttpStatus.NOT_FOUND);
             } else if (quantity <= 0) {
                 throw new ApiRequestException("Quantity cannot be 0",
@@ -127,5 +167,18 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
             throw new ApiRequestException(e.getMessage(), e);
         }
         return shoppingCartProduct;
+    }
+
+    private User getUserById(Long idUser) {
+        Optional<User> user;
+        try {
+            user = userRepository.findById(idUser);
+            if (!user.isPresent()) {
+                throw new ApiRequestException("Cannot create user, role with id: " + idUser + " not found", HttpStatus.NOT_FOUND);
+            }
+            return user.get();
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage(), e);
+        }
     }
 }

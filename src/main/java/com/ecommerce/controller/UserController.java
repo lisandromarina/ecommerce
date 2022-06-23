@@ -9,15 +9,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class UserController {
 
     @Autowired
     UserServiceImpl userServiceImpl;
-
-    @PostMapping("/create")
-    public void createUser(@RequestBody UserDTO userDTO) {
-        userServiceImpl.save(userDTO);
-    }
 
     @PutMapping("/update")
     public void updateUser(UserDTO userDTO) {
@@ -38,4 +34,5 @@ public class UserController {
     public void deleteUser(@PathVariable("userId") Long userId) {
         userServiceImpl.delete(userId);
     }
+
 }

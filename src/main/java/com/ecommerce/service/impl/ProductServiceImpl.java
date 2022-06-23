@@ -1,8 +1,12 @@
 package com.ecommerce.service.impl;
 
+import com.ecommerce.DTO.CategoryDTO;
 import com.ecommerce.DTO.ProductDTO;
 import com.ecommerce.exception.ApiRequestException;
+import com.ecommerce.model.Category;
 import com.ecommerce.model.Product;
+import com.ecommerce.model.User;
+import com.ecommerce.repository.CategoryRepository;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.service.AbmService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -18,6 +23,9 @@ public class ProductServiceImpl implements AbmService<ProductDTO> {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
 
     @Override
     public void save(ProductDTO productDTO) {
@@ -28,6 +36,12 @@ public class ProductServiceImpl implements AbmService<ProductDTO> {
         product.setPrice(productDTO.getPrice());
         product.setDescription(productDTO.getDescription());
         product.setActive(Boolean.TRUE);
+
+        Category category = null;
+        if(productDTO.getCategoryDTO() != null){
+            category = getCategoryById(productDTO.getCategoryDTO().getId());
+        }
+        product.setCategory(category);
 
         try {
             productRepository.save(product);
@@ -89,5 +103,16 @@ public class ProductServiceImpl implements AbmService<ProductDTO> {
         }
     }
 
-    ;
+    private Category getCategoryById(Long idCategory) {
+        Optional<Category> category;
+        try {
+            category = categoryRepository.findById(idCategory);
+            if (!category.isPresent()) {
+                return null;
+            }
+            return category.get();
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage(), e);
+        }
+    }
 }

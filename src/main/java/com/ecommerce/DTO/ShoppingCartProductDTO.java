@@ -7,6 +7,8 @@ public class ShoppingCartProductDTO {
     private String nameProduct;
     private Integer quantity;
 
+    private Long userId;
+
     public Long getIdProduct() {
         return idProduct;
     }
@@ -45,6 +47,14 @@ public class ShoppingCartProductDTO {
 
     public void setNameProduct(String nameProduct) {
         this.nameProduct = nameProduct;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public ShoppingCartProductDTO(Long productId, String name, Double sellPrice, Integer quantity) {

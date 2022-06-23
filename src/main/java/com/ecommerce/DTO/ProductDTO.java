@@ -1,5 +1,7 @@
 package com.ecommerce.DTO;
 
+import com.ecommerce.model.Category;
+
 import javax.persistence.Column;
 
 public class ProductDTO {
@@ -14,15 +16,19 @@ public class ProductDTO {
 
     private Boolean isActive;
 
+    private CategoryDTO categoryDTO;
+
     public ProductDTO() {
     }
 
-    public ProductDTO(Long id, String name, Double price, String description, Boolean isActive) {
+    public ProductDTO(Long id, String name, Double price, String description, Boolean isActive,
+                      Long categoryId,String categoryName,Boolean catoryIsActive) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
         this.isActive = isActive;
+        this.categoryDTO = new CategoryDTO(categoryId, categoryName, catoryIsActive);
     }
 
     public Long getId() {
@@ -63,5 +69,13 @@ public class ProductDTO {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public CategoryDTO getCategoryDTO() {
+        return categoryDTO;
+    }
+
+    public void setCategoryDTO(CategoryDTO categoryDTO) {
+        this.categoryDTO = categoryDTO;
     }
 }

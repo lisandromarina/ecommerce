@@ -1,6 +1,7 @@
 package com.ecommerce.service.impl;
 
 import com.ecommerce.DTO.ShoppingCartDTO;
+import com.ecommerce.DTO.ShoppingCartProductDTO;
 import com.ecommerce.exception.ApiRequestException;
 import com.ecommerce.model.Role;
 import com.ecommerce.model.ShoppingCart;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -30,24 +32,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Autowired
     UserRepository userRepository;
 
-    //Save an order in the database
-    @Override
-    public void create(Long userId) {
-        validateUserExist(userId);
-
-        User user = getUserById(userId);
-
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setDateCreated(LocalDate.now());
-
-        try {
-            shoppingCart.setUser(user);
-            shoppingCartRepository.save(shoppingCart);
-        } catch (Exception e) {
-            throw new ApiRequestException(e.getMessage(), e);
-        }
-    }
-
     @Override
     public void update(ShoppingCart shoppingCart) {
         shoppingCartRepository.save(shoppingCart);
@@ -57,20 +41,41 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public ShoppingCartDTO findById(Long id) {
         validateShoppingCartExist(id);
-        try {
-            return shoppingCartRepository.findShoppingCartDTOById(id);
-        } catch (Exception e) {
+        try{
+            ShoppingCartDTO shoppingCartDTO = shoppingCartRepository.findShoppingCartDTOById(id);
+
+            Set<ShoppingCartProductDTO> shoppingCartProductDTO = shoppingCartProductRepository
+                    .findShoppingCartProductByShoppingCartId(shoppingCartDTO.getId());
+            shoppingCartDTO.setShoppingCartProductsDTO(shoppingCartProductDTO);
+
+            return shoppingCartDTO;
+        }catch (Exception e){
             throw new ApiRequestException(e.getMessage(), e);
         }
     }
 
     //Delete order by orderId
-    @Override
     public void delete(Long orderId) {
         try {
             shoppingCartProductRepository.deleteAllByShoppingCartId(orderId);
             shoppingCartRepository.deleteById(orderId);
         } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public ShoppingCartDTO findByUserId(Long userId){
+        try{
+            ShoppingCartDTO shoppingCartDTO = shoppingCartRepository.findByUserId(userId);
+
+            Set<ShoppingCartProductDTO> shoppingCartProductDTO = shoppingCartProductRepository
+                    .findShoppingCartProductByShoppingCartId(shoppingCartDTO.getId());
+
+            shoppingCartDTO.setShoppingCartProductsDTO(shoppingCartProductDTO);
+
+            return shoppingCartDTO;
+        }catch (Exception e){
             throw new ApiRequestException(e.getMessage(), e);
         }
     }

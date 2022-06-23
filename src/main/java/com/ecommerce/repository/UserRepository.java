@@ -13,7 +13,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(
             "SELECT new com.ecommerce.DTO.UserDTO(" +
-                    "u.id, " +
+                    "u.id," +
+                    "u.username, " +
                     "u.firstName, " +
                     "u.lastName, " +
                     "u.dateCreated, " +
@@ -25,7 +26,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(
             "SELECT new com.ecommerce.DTO.UserDTO(" +
-                    "u.id, " +
+                    "u.id," +
+                    "u.username, " +
                     "u.firstName, " +
                     "u.lastName, " +
                     "u.dateCreated, " +
@@ -40,5 +42,29 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User u " +
             "SET u.isActive = false " +
             "WHERE u.id = :userId")
-    void invalidateProductById(@Param("userId") Long userId);
+    void invalidateUserById(@Param("userId") Long userId);
+
+    @Query(
+            "SELECT new com.ecommerce.DTO.UserDTO(" +
+                    "u.id," +
+                    "u.username, " +
+                    "u.firstName, " +
+                    "u.lastName, " +
+                    "u.dateCreated, " +
+                    "u.email, " +
+                    "u.role, " +
+                    "u.password) " +
+                    "FROM User u " +
+                    "WHERE u.username = :username " +
+                    "AND u.isActive = true"
+    )
+    UserDTO findUserByUsername(@Param("username") String username);
+
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END " +
+            "FROM User u WHERE u.username = :username")
+    boolean existsByUsername(@Param("username") String username);
+
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END " +
+            "FROM User u WHERE u.email = :email")
+    boolean existsByEmail(@Param("email") String email);
 }

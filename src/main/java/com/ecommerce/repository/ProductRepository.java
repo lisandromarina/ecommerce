@@ -24,8 +24,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                     "p.name, " +
                     "p.price, " +
                     "p.description, " +
-                    "p.isActive) " +
+                    "p.isActive, " +
+                    "c.id, " +
+                    "c.name, " +
+                    "c.isActive) " +
                     "FROM Product p " +
+                    "INNER JOIN Category c ON (c.id = p.category.id)" +
                     "WHERE p.isActive = true"
     )
     List<ProductDTO> findAllDTO();
@@ -36,8 +40,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                     "p.name, " +
                     "p.price," +
                     "p.description,  " +
-                    "p.isActive) " +
+                    "p.isActive, " +
+                    "c.id, " +
+                    "c.name, " +
+                    "c.isActive) " +
                     "FROM Product p " +
+                    "INNER JOIN Category c ON (c.id = p.category.id)" +
                     "WHERE p.id = :productId"
     )
     ProductDTO findProductDTOById(@Param("productId") Long productId);
@@ -47,4 +55,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "SET p.isActive = false " +
             "WHERE p.id = :productId")
     void invalidateProductById(@Param("productId") Long productId);
+
+    @Modifying
+    @Query("UPDATE Product p " +
+            "SET p.category = null " +
+            "WHERE p.category.id = :categoryId")
+    void changeCategoryInAllProductByCategoryId(@Param("categoryId") Long categoryId);
 }

@@ -15,10 +15,10 @@ public class Product implements Serializable {
     @Column(name = "product_id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "product_name")
+    @Column(name = "product_name", nullable = false)
     private String name;
 
-    @Column(name = "product_price")
+    @Column(name = "product_price", nullable = false )
     private Double price;
 
     @Column(name = "product_description")
@@ -26,6 +26,10 @@ public class Product implements Serializable {
 
     @Column(name = "product_is_active", nullable = false)
     private Boolean isActive;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     public Long getId() {
         return id;
@@ -65,5 +69,13 @@ public class Product implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
