@@ -18,6 +18,9 @@ public class Product implements Serializable {
     @Column(name = "product_name", nullable = false)
     private String name;
 
+    @JoinColumn(name = "user_id", nullable = false)
+    private Long userId;
+
     @Column(name = "product_price", nullable = false )
     private Double price;
 
@@ -77,5 +80,13 @@ public class Product implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

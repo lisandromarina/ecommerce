@@ -34,6 +34,7 @@ public class ProductServiceImpl implements AbmService<ProductDTO> {
         Product product = new Product();
         product.setName(productDTO.getName());
         product.setPrice(productDTO.getPrice());
+        product.setUserId(productDTO.getUserId());
         product.setDescription(productDTO.getDescription());
         product.setActive(Boolean.TRUE);
 
