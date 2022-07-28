@@ -43,7 +43,7 @@ public interface ShoppingCartProductRepository extends JpaRepository<ShoppingCar
     void deleteAllByShoppingCartId(@Param("shoppingCartId") Long shoppingCartId);
 
     @Query(
-            "SELECT CASE WHEN COUNT(sc) <= 0 THEN true ELSE false END " +
+            "SELECT CASE WHEN COUNT(scp) <= 0 THEN true ELSE false END " +
                     "FROM ShoppingCartProduct scp WHERE scp.pk.shoppingCart.id = :shoppingCartId"
     )
     Boolean isEmptyShoppingCart(@Param("shoppingCartId") Long shoppingCartId);

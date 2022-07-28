@@ -27,7 +27,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                     "p.isActive, " +
                     "c.id, " +
                     "c.name, " +
-                    "c.isActive) " +
+                    "c.isActive, " +
+                    "p.userId) " +
                     "FROM Product p " +
                     "INNER JOIN Category c ON (c.id = p.category.id)" +
                     "WHERE p.isActive = true"
@@ -43,9 +44,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                     "p.isActive, " +
                     "c.id, " +
                     "c.name, " +
-                    "c.isActive) " +
+                    "c.isActive, " +
+                    "p.userId) " +
                     "FROM Product p " +
-                    "INNER JOIN Category c ON (c.id = p.category.id)" +
+                    "INNER JOIN Category c ON (c.id = p.category.id) " +
                     "WHERE p.id = :productId"
     )
     ProductDTO findProductDTOById(@Param("productId") Long productId);

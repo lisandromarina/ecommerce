@@ -69,11 +69,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         try{
             ShoppingCartDTO shoppingCartDTO = shoppingCartRepository.findByUserId(userId);
 
-            Set<ShoppingCartProductDTO> shoppingCartProductDTO = shoppingCartProductRepository
-                    .findShoppingCartProductByShoppingCartId(shoppingCartDTO.getId());
+            if(shoppingCartDTO != null){
+                Set<ShoppingCartProductDTO> shoppingCartProductDTO = shoppingCartProductRepository
+                        .findShoppingCartProductByShoppingCartId(shoppingCartDTO.getId());
 
-            shoppingCartDTO.setShoppingCartProductsDTO(shoppingCartProductDTO);
-
+                shoppingCartDTO.setShoppingCartProductsDTO(shoppingCartProductDTO);
+            }
             return shoppingCartDTO;
         }catch (Exception e){
             throw new ApiRequestException(e.getMessage(), e);

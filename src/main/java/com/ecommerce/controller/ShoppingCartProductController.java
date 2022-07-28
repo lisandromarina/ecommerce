@@ -13,7 +13,7 @@ public class ShoppingCartProductController {
     ShoppingCartProductServiceImpl shoppingCartProductServiceImpl;
 
     @PostMapping("/create")
-    public void createShoppingCartProduct(@RequestBody ShoppingCartProductDTO shoppingCartProductDTO) {
+    public void createOrUpdatehoppingCartProduct(@RequestBody ShoppingCartProductDTO shoppingCartProductDTO) {
         shoppingCartProductServiceImpl.createOrUpdate(shoppingCartProductDTO);
     }
 

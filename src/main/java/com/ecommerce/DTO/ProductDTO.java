@@ -8,6 +8,8 @@ public class ProductDTO {
 
     private Long id;
 
+    private Long userId;
+
     private String name;
 
     private Double price;
@@ -22,13 +24,14 @@ public class ProductDTO {
     }
 
     public ProductDTO(Long id, String name, Double price, String description, Boolean isActive,
-                      Long categoryId,String categoryName,Boolean catoryIsActive) {
+                      Long categoryId,String categoryName,Boolean catoryIsActive, Long userId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
         this.isActive = isActive;
         this.categoryDTO = new CategoryDTO(categoryId, categoryName, catoryIsActive);
+        this.userId = userId;
     }
 
     public Long getId() {
@@ -77,5 +80,13 @@ public class ProductDTO {
 
     public void setCategoryDTO(CategoryDTO categoryDTO) {
         this.categoryDTO = categoryDTO;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
