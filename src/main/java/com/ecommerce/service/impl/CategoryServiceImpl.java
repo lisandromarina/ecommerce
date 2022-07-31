@@ -6,6 +6,7 @@ import com.ecommerce.model.Category;
 import com.ecommerce.repository.CategoryRepository;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.service.AbmService;
+import com.ecommerce.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class CategoryServiceImpl implements AbmService<CategoryDTO> {
+public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     CategoryRepository categoryRepository;
@@ -24,7 +25,7 @@ public class CategoryServiceImpl implements AbmService<CategoryDTO> {
     ProductRepository productRepository;
 
     @Override
-    public void save(CategoryDTO categoryDTO) {
+    public Category save(CategoryDTO categoryDTO) {
         validateFieldsCategory(categoryDTO);
 
         Category category = new Category();
@@ -32,7 +33,7 @@ public class CategoryServiceImpl implements AbmService<CategoryDTO> {
         category.setActive(true);
 
         try {
-            categoryRepository.save(category);
+            return categoryRepository.save(category);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
