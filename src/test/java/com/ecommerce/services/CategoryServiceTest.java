@@ -3,7 +3,9 @@ package com.ecommerce.services;
 import com.ecommerce.DTO.CategoryDTO;
 import com.ecommerce.exception.ApiRequestException;
 import com.ecommerce.model.Category;
+import com.ecommerce.model.Product;
 import com.ecommerce.repository.CategoryRepository;
+import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.service.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,9 @@ public class CategoryServiceTest {
 
     @Mock
     private CategoryRepository categoryRepository;
+
+    @Mock
+    private ProductRepository productRepository;
 
     @InjectMocks
     private CategoryServiceImpl categoryService;
@@ -118,5 +123,41 @@ public class CategoryServiceTest {
                 "Expected category id different to throw exception");
 
         assertTrue(thrown.getMessage().contains("The category with id " + categoryID + " doesn't exist"));
+    }
+
+    @Test
+    public void deleteIdNotExist(){
+        Long categoryID = null;
+
+        when(categoryRepository.existsById(categoryID)).thenReturn(false);
+
+        ApiRequestException thrown = assertThrows(ApiRequestException.class,() -> categoryService.delete(categoryID),
+                "Expected category id different to throw exception");
+
+        assertTrue(thrown.getMessage().contains("The category with id " + categoryID + " doesn't exist"));
+    }
+
+    @Test
+    public void deleteIdNull(){
+        Long categoryID = 1L;
+
+        when(categoryRepository.existsById(categoryID)).thenReturn(false);
+
+        ApiRequestException thrown = assertThrows(ApiRequestException.class,() -> categoryService.delete(categoryID),
+                "Expected category id different to throw exception");
+
+        assertTrue(thrown.getMessage().contains("The category with id " + categoryID + " doesn't exist"));
+    }
+
+    @Test
+    public void deleteSuccess(){
+        Long categoryID = 1L;
+
+        when(categoryRepository.existsById(categoryID)).thenReturn(true);
+
+        categoryService.delete(categoryID);
+
+        verify(productRepository, times(1)).changeCategoryInAllProductByCategoryId(categoryID);
+        verify(categoryRepository, times(1)).invalidateCategoryById(categoryID);
     }
 }
