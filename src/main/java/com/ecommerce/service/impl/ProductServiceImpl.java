@@ -1,14 +1,12 @@
 package com.ecommerce.service.impl;
 
-import com.ecommerce.DTO.CategoryDTO;
 import com.ecommerce.DTO.ProductDTO;
 import com.ecommerce.exception.ApiRequestException;
 import com.ecommerce.model.Category;
 import com.ecommerce.model.Product;
-import com.ecommerce.model.User;
 import com.ecommerce.repository.CategoryRepository;
 import com.ecommerce.repository.ProductRepository;
-import com.ecommerce.service.AbmService;
+import com.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class ProductServiceImpl implements AbmService<ProductDTO> {
+public class ProductServiceImpl implements ProductService {
 
     @Autowired
     ProductRepository productRepository;
@@ -28,7 +26,7 @@ public class ProductServiceImpl implements AbmService<ProductDTO> {
     CategoryRepository categoryRepository;
 
     @Override
-    public void save(ProductDTO productDTO) {
+    public Product save(ProductDTO productDTO) {
         validateInvalidProductFields(productDTO);
 
         Product product = new Product();
@@ -45,7 +43,7 @@ public class ProductServiceImpl implements AbmService<ProductDTO> {
         product.setCategory(category);
 
         try {
-            productRepository.save(product);
+            return productRepository.save(product);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
@@ -99,7 +97,8 @@ public class ProductServiceImpl implements AbmService<ProductDTO> {
                 || productDTO.getDescription() == null
                 || productDTO.getDescription().isEmpty()
                 || productDTO.getPrice() == null
-                || productDTO.getName().isEmpty()) {
+                || productDTO.getName().isEmpty()
+                || productDTO.getUserId() == null){
             throw new ApiRequestException("The product cannot have empty fields", HttpStatus.BAD_REQUEST);
         }
     }

@@ -5,7 +5,6 @@ import com.ecommerce.exception.ApiRequestException;
 import com.ecommerce.model.Category;
 import com.ecommerce.repository.CategoryRepository;
 import com.ecommerce.repository.ProductRepository;
-import com.ecommerce.service.AbmService;
 import com.ecommerce.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
