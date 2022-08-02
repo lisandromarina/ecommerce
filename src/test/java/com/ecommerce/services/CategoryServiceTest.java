@@ -3,16 +3,13 @@ package com.ecommerce.services;
 import com.ecommerce.DTO.CategoryDTO;
 import com.ecommerce.exception.ApiRequestException;
 import com.ecommerce.model.Category;
-import com.ecommerce.model.Product;
 import com.ecommerce.repository.CategoryRepository;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.service.impl.CategoryServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -34,7 +31,7 @@ public class CategoryServiceTest {
     private CategoryServiceImpl categoryService;
 
     @Test
-    public void createCategorySuccess(){
+    public void createCategorySuccessTest(){
         CategoryDTO categoryDTO = new CategoryDTO();
         categoryDTO.setName("oneCategory");
 
@@ -52,7 +49,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void createEmptyNameCategoryException(){
+    public void createEmptyNameCategoryExceptionTest(){
         CategoryDTO categoryDTO = new CategoryDTO();
         categoryDTO.setName("");
 
@@ -63,7 +60,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void createNullNameCategoryException(){
+    public void createNullNameCategoryExceptionTest(){
         CategoryDTO categoryDTO = new CategoryDTO();
 
         ApiRequestException thrown = assertThrows(ApiRequestException.class,() -> categoryService.save(categoryDTO),
@@ -73,7 +70,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void findAllCategorySuccess(){
+    public void findAllCategorySuccessTest(){
         List<CategoryDTO> listDTO = new ArrayList<>();
         listDTO.add(new CategoryDTO());
         listDTO.add(new CategoryDTO());
@@ -87,7 +84,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void findCategoryByIdSuccess(){
+    public void findCategoryByIdSuccessTest(){
         Long categoryID = 1L;
         CategoryDTO categoryDTO = new CategoryDTO();
         categoryDTO.setId(categoryID);
@@ -102,7 +99,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void findCategoryByIdNotExist(){
+    public void findCategoryByIdNotExistTest(){
         Long categoryID = 1L;
 
         when(categoryRepository.existsById(categoryID)).thenReturn(false);
@@ -114,7 +111,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void findCategoryByIdNull(){
+    public void findCategoryByIdNullTest(){
         Long categoryID = null;
 
         when(categoryRepository.existsById(categoryID)).thenReturn(false);
@@ -126,7 +123,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void deleteIdNotExist(){
+    public void deleteIdNotExistTest(){
         Long categoryID = null;
 
         when(categoryRepository.existsById(categoryID)).thenReturn(false);
@@ -138,7 +135,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void deleteIdNull(){
+    public void deleteIdNullTest(){
         Long categoryID = 1L;
 
         when(categoryRepository.existsById(categoryID)).thenReturn(false);
@@ -150,7 +147,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void deleteSuccess(){
+    public void deleteSuccessTest(){
         Long categoryID = 1L;
 
         when(categoryRepository.existsById(categoryID)).thenReturn(true);
