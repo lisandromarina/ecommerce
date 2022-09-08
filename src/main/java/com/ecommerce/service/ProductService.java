@@ -1,5 +1,6 @@
 package com.ecommerce.service;
 
+import com.ecommerce.DTO.CategoryDTO;
 import com.ecommerce.DTO.ProductDTO;
 import com.ecommerce.model.Product;
 
@@ -14,5 +15,6 @@ public interface ProductService {
 
     ProductDTO findById(Long id);
 
+    List<ProductDTO> findProductByIdCategory(Long idCategory);
     void delete(Long id);
 }

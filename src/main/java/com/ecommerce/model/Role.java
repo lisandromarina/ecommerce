@@ -1,4 +1,4 @@
 package com.ecommerce.model;
 public enum Role {
-    USER, ADMIN
+    USER,SELLER, ADMIN
 }
