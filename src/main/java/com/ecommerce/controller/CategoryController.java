@@ -1,7 +1,7 @@
 package com.ecommerce.controller;
 
 import com.ecommerce.DTO.CategoryDTO;
-import com.ecommerce.service.impl.CategoryServiceImpl;
+import com.ecommerce.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,30 +12,30 @@ import java.util.List;
 public class CategoryController {
 
     @Autowired
-    CategoryServiceImpl categoryServiceImpl;
+    CategoryService categoryService;
 
     @GetMapping("/findAll")
     public List<CategoryDTO> findAllCategory() {
-        return categoryServiceImpl.findAll();
+        return categoryService.findAll();
     }
 
     @GetMapping("/findById/{id}")
     public CategoryDTO findCategoryById(@PathVariable("id") Long id) {
-        return categoryServiceImpl.findById(id);
+        return categoryService.findById(id);
     }
 
     @PostMapping("/save")
     public void saveCategory(@RequestBody CategoryDTO categoryDTO) {
-        categoryServiceImpl.save(categoryDTO);
+        categoryService.save(categoryDTO);
     }
 
     @PutMapping("/update")
     public void updateCategory(@RequestBody CategoryDTO categoryDTO) {
-        categoryServiceImpl.update(categoryDTO);
+        categoryService.update(categoryDTO);
     }
 
     @DeleteMapping("/delete/{id}")
     public void deleteCategoryById(@PathVariable("id") Long id) {
-        categoryServiceImpl.delete(id);
+        categoryService.delete(id);
     }
 }

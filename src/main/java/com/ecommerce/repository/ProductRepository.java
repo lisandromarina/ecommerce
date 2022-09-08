@@ -52,6 +52,19 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     )
     ProductDTO findProductDTOById(@Param("productId") Long productId);
 
+    @Query(
+            "SELECT new com.ecommerce.DTO.ProductDTO(" +
+                    "p.id, " +
+                    "p.name, " +
+                    "p.price," +
+                    "p.description,  " +
+                    "p.isActive, " +
+                    "p.userId) " +
+                    "FROM Product p " +
+                    "WHERE p.category.id = :idCategory"
+    )
+    List<ProductDTO> findProductByIdCategory(@Param("idCategory") Long idCategory);
+
     @Modifying
     @Query("UPDATE Product p " +
             "SET p.isActive = false " +

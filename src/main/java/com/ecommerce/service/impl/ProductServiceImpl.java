@@ -75,6 +75,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDTO> findProductByIdCategory(Long idCategory) {
+        return productRepository.findProductByIdCategory(idCategory);
+    }
+
+    @Override
     public void delete(Long productId) {
         validateProductExist(productId);
         try {

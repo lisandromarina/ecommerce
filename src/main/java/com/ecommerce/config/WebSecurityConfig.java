@@ -51,6 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/authentication/**");
         web.ignoring().antMatchers("/product/findAll");
         web.ignoring().antMatchers("/product/findById/**");
+        web.ignoring().antMatchers("/category/findAll");
     }
 
     @Bean

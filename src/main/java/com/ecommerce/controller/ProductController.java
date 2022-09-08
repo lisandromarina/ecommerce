@@ -1,6 +1,8 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.DTO.CategoryDTO;
 import com.ecommerce.DTO.ProductDTO;
+import com.ecommerce.service.ProductService;
 import com.ecommerce.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,30 +14,35 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    ProductServiceImpl productServiceImpl;
+    ProductService productService;
 
     @GetMapping("/findAll")
     public List<ProductDTO> findAllProduct() {
-        return productServiceImpl.findAll();
+        return productService.findAll();
     }
 
     @GetMapping("/findById/{id}")
     public ProductDTO findProductById(@PathVariable("id") Long id) {
-        return productServiceImpl.findById(id);
+        return productService.findById(id);
+    }
+
+    @GetMapping("/findProductByIdCategory/{idCategory}")
+    public List<ProductDTO> findProductByIdCategory(@PathVariable("idCategory") Long idCategory){
+        return productService.findProductByIdCategory(idCategory);
     }
 
     @PostMapping("/save")
     public void saveProduct(@RequestBody ProductDTO productDto) {
-        productServiceImpl.save(productDto);
+        productService.save(productDto);
     }
 
     @PutMapping("/update")
     public void updateProduct(@RequestBody ProductDTO productDTO) {
-        productServiceImpl.update(productDTO);
+        productService.update(productDTO);
     }
 
     @DeleteMapping("/delete/{id}")
     public void deleteProductById(@PathVariable("id") Long id) {
-        productServiceImpl.delete(id);
+        productService.delete(id);
     }
 }

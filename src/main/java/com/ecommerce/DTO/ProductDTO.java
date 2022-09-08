@@ -34,6 +34,15 @@ public class ProductDTO {
         this.userId = userId;
     }
 
+    public ProductDTO(Long id, String name, Double price, String description, Boolean isActive, Long userId) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.isActive = isActive;
+        this.userId = userId;
+    }
+
     public Long getId() {
         return id;
     }
