@@ -28,7 +28,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                     "c.id, " +
                     "c.name, " +
                     "c.isActive, " +
-                    "p.userId) " +
+                    "p.userId," +
+                    "p.imageUrl) " +
                     "FROM Product p " +
                     "INNER JOIN Category c ON (c.id = p.category.id)" +
                     "WHERE p.isActive = true"
@@ -45,7 +46,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                     "c.id, " +
                     "c.name, " +
                     "c.isActive, " +
-                    "p.userId) " +
+                    "p.userId," +
+                    "p.imageUrl) " +
                     "FROM Product p " +
                     "INNER JOIN Category c ON (c.id = p.category.id) " +
                     "WHERE p.id = :productId"
@@ -58,8 +60,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                     "p.name, " +
                     "p.price," +
                     "p.description,  " +
-                    "p.isActive, " +
-                    "p.userId) " +
+                    "p.isActive," +
+                    "p.userId," +
+                    "p.imageUrl) " +
                     "FROM Product p " +
                     "WHERE p.category.id = :idCategory"
     )

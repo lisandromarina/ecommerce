@@ -15,9 +15,10 @@ public interface ShoppingCartProductRepository extends JpaRepository<ShoppingCar
     @Query(
             "SELECT new com.ecommerce.DTO.ShoppingCartProductDTO(" +
                     "p.id, " +
-                    "p.name, " +
+                    "p.name," +
                     "scp.sellPrice, " +
-                    "scp.quantity) " +
+                    "scp.quantity," +
+                    "p.imageUrl) " +
                     "FROM ShoppingCartProduct scp " +
                     "INNER JOIN Product p ON (scp.pk.product.id = p.id) " +
                     "WHERE scp.pk.shoppingCart.id = :shoppingCartId"

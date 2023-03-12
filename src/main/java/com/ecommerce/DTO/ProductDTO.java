@@ -1,6 +1,7 @@
 package com.ecommerce.DTO;
 
 import com.ecommerce.model.Category;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Column;
 
@@ -18,13 +19,19 @@ public class ProductDTO {
 
     private Boolean isActive;
 
+    private  MultipartFile file;
+
+    private String imageUrl;
+
     private CategoryDTO categoryDTO;
+
+    private Long categoryId;
 
     public ProductDTO() {
     }
 
     public ProductDTO(Long id, String name, Double price, String description, Boolean isActive,
-                      Long categoryId,String categoryName,Boolean catoryIsActive, Long userId) {
+                      Long categoryId,String categoryName,Boolean catoryIsActive, Long userId, String imageUrl) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -32,15 +39,17 @@ public class ProductDTO {
         this.isActive = isActive;
         this.categoryDTO = new CategoryDTO(categoryId, categoryName, catoryIsActive);
         this.userId = userId;
+        this.imageUrl = imageUrl;
     }
 
-    public ProductDTO(Long id, String name, Double price, String description, Boolean isActive, Long userId) {
+    public ProductDTO(Long id, String name, Double price, String description, Boolean isActive, Long userId, String imageUrl) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
         this.isActive = isActive;
         this.userId = userId;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -63,6 +72,22 @@ public class ProductDTO {
         return price;
     }
 
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -73,6 +98,14 @@ public class ProductDTO {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Boolean getActive() {
@@ -90,6 +123,7 @@ public class ProductDTO {
     public void setCategoryDTO(CategoryDTO categoryDTO) {
         this.categoryDTO = categoryDTO;
     }
+
 
     public Long getUserId() {
         return userId;
