@@ -1,6 +1,7 @@
 package com.ecommerce.DTO;
 
 import com.ecommerce.model.Role;
+import com.ecommerce.model.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.Column;
@@ -62,6 +63,10 @@ public class UserDTO {
     public UserDTO(String username, String password){
         this.username = username;
         this.password = password;
+    }
+
+    public UserDTO(Long id){
+        this.id = id;
     }
 
     public Long getId() {

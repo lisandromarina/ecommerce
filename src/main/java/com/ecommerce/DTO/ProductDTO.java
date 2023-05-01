@@ -4,6 +4,7 @@ import com.ecommerce.model.Category;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Column;
+import java.util.List;
 
 public class ProductDTO {
 
@@ -24,6 +25,8 @@ public class ProductDTO {
     private String imageUrl;
 
     private CategoryDTO categoryDTO;
+
+    private List<CommentDTO> comments;
 
     private Long categoryId;
 
@@ -50,6 +53,10 @@ public class ProductDTO {
         this.isActive = isActive;
         this.userId = userId;
         this.imageUrl = imageUrl;
+    }
+
+    public ProductDTO(Long id) {
+        this.id = id;
     }
 
     public Long getId() {
@@ -131,5 +138,13 @@ public class ProductDTO {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public List<CommentDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDTO> comments) {
+        this.comments = comments;
     }
 }

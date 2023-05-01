@@ -1,10 +1,12 @@
 package com.ecommerce.service.impl;
 
+import com.ecommerce.DTO.CommentDTO;
 import com.ecommerce.DTO.ProductDTO;
 import com.ecommerce.exception.ApiRequestException;
 import com.ecommerce.model.Category;
 import com.ecommerce.model.Product;
 import com.ecommerce.repository.CategoryRepository;
+import com.ecommerce.repository.CommentRepository;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.service.ProductService;
 import io.imagekit.sdk.ImageKit;
@@ -32,9 +34,12 @@ public class ProductServiceImpl implements ProductService {
     private String imageKitUrlEndpoint;
     @Autowired
     ProductRepository productRepository;
+
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    CommentRepository commentRepository;
     @Override
     public Product save(ProductDTO productDTO) {
         validateInvalidProductFields(productDTO);
@@ -91,7 +96,10 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO findById(Long id) {
         validateProductExist(id);
         try {
-            return productRepository.findProductDTOById(id);
+            ProductDTO productDTO = productRepository.findProductDTOById(id);
+            List<CommentDTO> comments = commentRepository.findCommentsByIProductId(id);
+            productDTO.setComments(comments);
+            return productDTO;
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
