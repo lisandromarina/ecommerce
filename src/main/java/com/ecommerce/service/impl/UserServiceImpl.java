@@ -7,9 +7,12 @@ import com.ecommerce.model.User;
 import com.ecommerce.repository.UserRepository;
 import com.ecommerce.service.UserService;
 import com.ecommerce.utils.JwtTokenUtil;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.transaction.Transactional;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -35,13 +41,16 @@ public class UserServiceImpl implements UserService {
     JwtUserDetailsService userDetailsService;
 
     @Autowired
+    private JavaMailSender mailSender;
+
+    @Autowired
     JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     AuthenticationManager authenticationManager;
 
     @Override
-    public ResponseEntity<?> saveUser(UserDTO userDTO) {
+    public ResponseEntity<?> saveUser(UserDTO userDTO, String siteURL) {
         validateUserFields(userDTO);
 
         User user = new User();
@@ -50,13 +59,17 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDTO.getEmail());
         user.setUsername(userDTO.getUsername());
         user.setDateCreated(LocalDate.now());
-        user.setActive(true);
         user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
         user.setRole(Role.USER);
+
+        String randomCode = RandomString.make(64);
+        user.setVerificationCode(randomCode);
+        user.setActive(false);
 
         try {
             Long userId = userRepository.save(user).getId();
             userDTO.setId(userId);
+            sendVerificationEmail(user, siteURL);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
@@ -68,6 +81,24 @@ public class UserServiceImpl implements UserService {
         responseMap.put("message", "Account created successfully");
         responseMap.put("token", token);
         return ResponseEntity.ok(responseMap);
+    }
+
+    public boolean verify(String verificationCode) {
+        try{
+        User user = userRepository.findByVerificationCode(verificationCode);
+        if (user == null || user.getActive()) {
+            return false;
+        } else {
+            user.setVerificationCode(null);
+            user.setActive(true);
+            System.out.println(user.getActive());
+            userRepository.save(user);
+
+            return true;
+        }
+        }catch (Exception e){
+            throw new ApiRequestException(e.getMessage(), e);
+        }
     }
 
     @Override
@@ -127,6 +158,34 @@ public class UserServiceImpl implements UserService {
         }catch (Exception e){
             throw new ApiRequestException(e.getMessage(), e);
         }
+    }
+
+    private void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException {
+        String toAddress = user.getEmail();
+        String fromAddress = "lisandromarina1@gmail.com";
+        String senderName = "Mercado Licha";
+        String subject = "Por favor verifique su cuenta!";
+        String content = "Querido [[name]],<br>"
+                + "Por favor haga click en el enlace de abajo para verificar tu cuenta:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFICAR</a></h3>"
+                + "Muchas gracias!,<br>"
+                + "Mercado Licha.";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", user.getFirstName());
+        String verifyURL = siteURL + "/user/verify?code=" + user.getVerificationCode();
+
+        content = content.replace("[[URL]]", verifyURL);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
     }
 
     private void validateUserFields(UserDTO userDTO) {

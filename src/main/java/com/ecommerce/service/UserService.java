@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserService {
 
-    public ResponseEntity<?> saveUser(UserDTO userDTO);
+    public ResponseEntity<?> saveUser(UserDTO userDTO, String siteUrl);
 
     public ResponseEntity<?> loginUser(@RequestBody UserDTO userDTO);
 

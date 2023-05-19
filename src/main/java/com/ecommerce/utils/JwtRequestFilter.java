@@ -1,5 +1,6 @@
 package com.ecommerce.utils;
 
+import com.ecommerce.exception.ApiRequestException;
 import com.ecommerce.service.impl.JwtUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 
@@ -31,40 +32,45 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+        try {
 
-        String requestTokenHeader = request.getHeader("Authorization");
-        if (StringUtils.startsWith(requestTokenHeader,"Bearer ")) {
-            String jwtToken = requestTokenHeader.substring(7);
-            try {
-                String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-                if (StringUtils.isNotEmpty(username)
-                        && null == SecurityContextHolder.getContext().getAuthentication()) {
 
-                    UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
+            String requestTokenHeader = request.getHeader("Authorization");
+            if (StringUtils.startsWith(requestTokenHeader, "Bearer ")) {
+                String jwtToken = requestTokenHeader.substring(7);
+                try {
+                    String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+                    if (StringUtils.isNotEmpty(username)
+                            && null == SecurityContextHolder.getContext().getAuthentication()) {
 
-                    if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
-                        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                                new UsernamePasswordAuthenticationToken(
-                                        userDetails, null, userDetails.getAuthorities());
+                        UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
 
-                        usernamePasswordAuthenticationToken
-                                .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
+                            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                                    new UsernamePasswordAuthenticationToken(
+                                            userDetails, null, userDetails.getAuthorities());
 
-                        SecurityContextHolder.getContext()
-                                .setAuthentication(usernamePasswordAuthenticationToken);
+                            usernamePasswordAuthenticationToken
+                                    .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                            SecurityContextHolder.getContext()
+                                    .setAuthentication(usernamePasswordAuthenticationToken);
+                        }
                     }
+                } catch (IllegalArgumentException e) {
+                    logger.error("Unable to fetch JWT Token");
+                } catch (ExpiredJwtException e) {
+                    logger.error("JWT Token is expired");
+                } catch (Exception e) {
+                    throw new ApiRequestException(e.getMessage(), e);
                 }
-            } catch (IllegalArgumentException e) {
-                logger.error("Unable to fetch JWT Token");
-            } catch (ExpiredJwtException e) {
-                logger.error("JWT Token is expired");
-            } catch (Exception e) {
-                logger.error(e.getMessage());
+            } else {
+                logger.warn("JWT Token does not begin with Bearer String");
             }
-        } else {
-            logger.warn("JWT Token does not begin with Bearer String");
+            chain.doFilter(request, response);
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage(), e);
         }
-        chain.doFilter(request, response);
     }
 
 }

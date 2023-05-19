@@ -3,6 +3,7 @@ package com.ecommerce.controller;
 import com.ecommerce.DTO.UserDTO;
 import com.ecommerce.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,15 @@ public class UserController {
     @PutMapping("/update")
     public void updateUser(UserDTO userDTO) {
         //userServiceImpl.create(userDTO);
+    }
+
+    @GetMapping("/verify")
+    public String verifyUser(@Param("code") String code) {
+        if (userServiceImpl.verify(code)) {
+            return "verify_success";
+        } else {
+            return "verify_fail";
+        }
     }
 
     @GetMapping("/findAll")

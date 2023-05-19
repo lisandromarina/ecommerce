@@ -39,6 +39,8 @@ public class User {
 
     @Column(name = "user_is_active", nullable = false)
     private Boolean isActive;
+    @Column(name = "user_verification_code")
+    private String verificationCode;
 
     public Long getId() {
         return id;
@@ -110,5 +112,13 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
     }
 }
