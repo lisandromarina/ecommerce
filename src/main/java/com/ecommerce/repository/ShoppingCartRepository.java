@@ -24,7 +24,7 @@ public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long
                     "sc.dateCreated, " +
                     "sc.isComplete) " +
                     "FROM ShoppingCart sc " +
-                    "WHERE sc.user.id = :userId"
+                    "WHERE sc.user.id = :userId AND sc.isComplete = false"
     )
     ShoppingCartDTO findByUserId(@Param("userId") Long userId);
 

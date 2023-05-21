@@ -2,6 +2,7 @@ package com.ecommerce.repository;
 
 import com.ecommerce.DTO.ProductDTO;
 import com.ecommerce.model.Product;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -79,4 +80,17 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "SET p.category = null " +
             "WHERE p.category.id = :categoryId")
     void changeCategoryInAllProductByCategoryId(@Param("categoryId") Long categoryId);
+
+    @Query("SELECT DISTINCT new com.ecommerce.DTO.ProductDTO(" +
+            "p.id, " +
+            "p.name) " +
+            "FROM Product p " +
+            "WHERE p.name LIKE %:userInput% " +
+            "AND p.id IN (" +
+            "   SELECT MIN(p2.id) " +
+            "   FROM Product p2 " +
+            "   WHERE p2.name LIKE %:userInput% " +
+            "   GROUP BY p2.name" +
+            ")")
+    List<ProductDTO> findProductNamesContainingInput(@Param("userInput") String userInput, Pageable pageable);
 }

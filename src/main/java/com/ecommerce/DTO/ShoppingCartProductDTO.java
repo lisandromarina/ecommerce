@@ -63,6 +63,10 @@ public class ShoppingCartProductDTO {
         this.imageUrl = imageUrl;
     }
 
+    public Double getTotal(){
+        return this.sellPrice * this.quantity;
+    }
+
     public void setUserId(Long userId) {
         this.userId = userId;
     }

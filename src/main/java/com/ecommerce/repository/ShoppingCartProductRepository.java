@@ -1,5 +1,6 @@
 package com.ecommerce.repository;
 
+import com.ecommerce.DTO.ShoppingCartDTO;
 import com.ecommerce.DTO.ShoppingCartProductDTO;
 import com.ecommerce.model.ShoppingCartProduct;
 import com.ecommerce.model.ShoppingCartProductPK;
@@ -24,6 +25,13 @@ public interface ShoppingCartProductRepository extends JpaRepository<ShoppingCar
                     "WHERE scp.pk.shoppingCart.id = :shoppingCartId"
     )
     Set<ShoppingCartProductDTO> findShoppingCartProductByShoppingCartId(@Param("shoppingCartId") Long shoppingCartId);
+
+    @Query(
+            "SELECT SUM(quantity * sell_price) AS totalPrice " +
+                    "FROM ShoppingCartProduct scp " +
+                    "WHERE scp.pk.shoppingCart.id = :id"
+    )
+    Double getTotalPriceByShoppingCartId(@Param("id") Long id);
 
     @Modifying
     @Query(

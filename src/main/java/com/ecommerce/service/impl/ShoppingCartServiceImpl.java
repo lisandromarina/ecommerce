@@ -48,6 +48,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                     .findShoppingCartProductByShoppingCartId(shoppingCartDTO.getId());
             shoppingCartDTO.setShoppingCartProductsDTO(shoppingCartProductDTO);
 
+            Double totalPrice = shoppingCartProductRepository.getTotalPriceByShoppingCartId(id);
+            shoppingCartDTO.setTotalPrice(totalPrice);
             return shoppingCartDTO;
         }catch (Exception e){
             throw new ApiRequestException(e.getMessage(), e);
@@ -74,6 +76,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                         .findShoppingCartProductByShoppingCartId(shoppingCartDTO.getId());
 
                 shoppingCartDTO.setShoppingCartProductsDTO(shoppingCartProductDTO);
+                Double totalPrice = shoppingCartProductRepository.getTotalPriceByShoppingCartId(shoppingCartDTO.getId());
+                shoppingCartDTO.setTotalPrice(totalPrice);
             }
             return shoppingCartDTO;
         }catch (Exception e){

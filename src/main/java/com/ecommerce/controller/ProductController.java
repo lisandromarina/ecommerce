@@ -37,6 +37,11 @@ public class ProductController {
             productService.save(productDto);
     }
 
+    @PostMapping(path = "/findProductListBySearchTool")
+    public List<ProductDTO> findProductsBySearchTool(@RequestBody String inputText) {
+        return productService.findBySearchTool(inputText);
+    }
+
     @PutMapping("/update")
     public void updateProduct(@RequestBody ProductDTO productDTO) {
         productService.update(productDTO);

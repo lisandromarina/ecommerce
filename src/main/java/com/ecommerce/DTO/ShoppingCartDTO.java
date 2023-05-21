@@ -10,7 +10,16 @@ public class ShoppingCartDTO {
     private Set<ShoppingCartProductDTO> shoppingCartProductsDTO = new HashSet<>();
     private Boolean isComplete;
 
+    private Double totalPrice;
+
     public ShoppingCartDTO() {
+    }
+
+    public ShoppingCartDTO(Long id, LocalDate dateCreated, Boolean isComplete, Double totalPrice) {
+        this.id = id;
+        this.dateCreated = dateCreated;
+        this.isComplete = isComplete;
+        this.totalPrice = totalPrice;
     }
 
     public ShoppingCartDTO(Long id, LocalDate dateCreated, Boolean isComplete) {
@@ -49,5 +58,13 @@ public class ShoppingCartDTO {
 
     public void setShoppingCartProductsDTO(Set<ShoppingCartProductDTO> shoppingCartProducts) {
         this.shoppingCartProductsDTO = shoppingCartProducts;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

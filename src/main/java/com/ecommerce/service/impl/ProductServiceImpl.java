@@ -15,6 +15,8 @@ import io.imagekit.sdk.models.FileCreateRequest;
 import io.imagekit.sdk.models.results.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -118,6 +120,13 @@ public class ProductServiceImpl implements ProductService {
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public List<ProductDTO> findBySearchTool(String inputText) {
+        System.out.println(inputText);
+        Pageable pageable = PageRequest.of(0, 7);
+        return productRepository.findProductNamesContainingInput(inputText, pageable);
     }
 
     private void validateProductExist(Long id) {

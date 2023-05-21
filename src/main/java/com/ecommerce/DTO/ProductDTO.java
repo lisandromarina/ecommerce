@@ -33,8 +33,13 @@ public class ProductDTO {
     public ProductDTO() {
     }
 
+    public ProductDTO(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public ProductDTO(Long id, String name, Double price, String description, Boolean isActive,
-                      Long categoryId,String categoryName,Boolean catoryIsActive, Long userId, String imageUrl) {
+                      Long categoryId, String categoryName, Boolean catoryIsActive, Long userId, String imageUrl) {
         this.id = id;
         this.name = name;
         this.price = price;
