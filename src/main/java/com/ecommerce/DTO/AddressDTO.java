@@ -7,11 +7,14 @@ import javax.persistence.JoinColumn;
 
 public class AddressDTO {
     private Long id;
+    private String fullName;
     private String postalCode;
     private String street;
     private String streetNumber;
     private String location;
+    private String province;
     private String country;
+    private String department;
     private User user;
     private Boolean isActive;
     private Boolean isDeleted;
@@ -87,13 +90,48 @@ public class AddressDTO {
         isDeleted = deleted;
     }
 
-    public AddressDTO(Long id, String street, String streetNumber, String postalCode,
-                      String location, String country, Boolean active, Boolean isDeleted) {
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public AddressDTO(Long id, String fullName, String street, String streetNumber, String department, String postalCode,
+                      String location,String province, String country, Boolean active, Boolean isDeleted) {
         this.id = id;
+        this.fullName = fullName;
         this.postalCode = postalCode;
         this.street = street;
         this.streetNumber = streetNumber;
+        this.department = department;
         this.location = location;
+        this.province = province;
         this.country = country;
         this.isActive = active;
         this.isDeleted = isDeleted;
