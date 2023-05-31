@@ -25,6 +25,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(userDTO.getUsername());
         user.setDateCreated(LocalDate.now());
         user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
-        user.setRole(Role.USER);
+        user.setRole(Role.SELLER);
 
         String randomCode = RandomString.make(64);
         user.setVerificationCode(randomCode);
@@ -151,12 +152,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long userId) {
+    public void delete(Long userId, Principal principal) {
         validateUserExist(userId);
-        try{
-            userRepository.invalidateUserById(userId);
-        }catch (Exception e){
-            throw new ApiRequestException(e.getMessage(), e);
+        UserDTO userDTO = userRepository.findUserDTOById(userId);
+        if(principal.getName().equals(userDTO.getUsername())){
+            try{
+                userRepository.invalidateUserById(userId);
+            }catch (Exception e){
+                throw new ApiRequestException(e.getMessage(), e);
+            }
+        }
+        else{
+            throw new ApiRequestException("No puede eliminar otro usuario que no sea el tuyo", HttpStatus.BAD_REQUEST);
         }
     }
 

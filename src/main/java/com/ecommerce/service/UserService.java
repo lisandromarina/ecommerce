@@ -4,6 +4,7 @@ import com.ecommerce.DTO.UserDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface UserService {
@@ -18,5 +19,5 @@ public interface UserService {
 
     public UserDTO findById(Long userId);
 
-    public void delete(Long userId);
+    public void delete(Long userId, Principal principal);
 }

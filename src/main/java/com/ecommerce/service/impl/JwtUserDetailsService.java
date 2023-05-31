@@ -1,6 +1,7 @@
 package com.ecommerce.service.impl;
 import com.ecommerce.DTO.UserDTO;
 import com.ecommerce.exception.ApiRequestException;
+import com.ecommerce.model.Role;
 import com.ecommerce.repository.UserRepository;
 import com.ecommerce.utils.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -31,7 +32,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDTO userDTO = userRepository.findUserByUsername(username);
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority(userDTO.getRole().toString()));
+        authorityList.add(new SimpleGrantedAuthority(userDTO.getRole().name()));
         return new User(userDTO.getUsername(), userDTO.getPassword(), authorityList);
     }
 

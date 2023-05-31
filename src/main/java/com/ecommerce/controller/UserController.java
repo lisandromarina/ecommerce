@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -41,8 +42,8 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{userId}")
-    public void deleteUser(@PathVariable("userId") Long userId) {
-        userServiceImpl.delete(userId);
+    public void deleteUser(@PathVariable("userId") Long userId, Principal principal) {
+        userServiceImpl.delete(userId, principal);
     }
 
 }
