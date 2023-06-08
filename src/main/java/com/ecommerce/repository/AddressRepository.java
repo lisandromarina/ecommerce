@@ -82,4 +82,21 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
             @Param("department") String department,
             @Param("addressId") Long addressId);
 
+    @Query(
+            "SELECT new com.ecommerce.DTO.AddressDTO(" +
+                    "a.id, " +
+                    "a.fullName, " +
+                    "a.street, " +
+                    "a.streetNumber, " +
+                    "a.department, " +
+                    "a.postalCode, " +
+                    "a.location, " +
+                    "a.province, " +
+                    "a.country, " +
+                    "a.isActive, " +
+                    "a.isDeleted) " +
+                    "FROM Address a " +
+                    "WHERE a.user.id = :userId AND a.isActive = true"
+    )
+    AddressDTO findActiveAddressByUserId(@Param("userId") Long userId);
 }

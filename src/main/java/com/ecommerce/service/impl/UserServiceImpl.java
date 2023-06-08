@@ -92,7 +92,6 @@ public class UserServiceImpl implements UserService {
         } else {
             user.setVerificationCode(null);
             user.setActive(true);
-            System.out.println(user.getActive());
             userRepository.save(user);
 
             return true;

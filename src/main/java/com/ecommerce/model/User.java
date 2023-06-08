@@ -42,6 +42,13 @@ public class User {
     @Column(name = "user_verification_code")
     private String verificationCode;
 
+    public User() {
+
+    }
+    public User(Long id) {
+        this.id=id;
+    }
+
     public Long getId() {
         return id;
     }
