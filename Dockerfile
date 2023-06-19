@@ -4,7 +4,7 @@
 FROM maven:3.6.0-jdk-11-slim AS build
 COPY src /home/app/src
 COPY pom.xml /home/app
-RUN mvn -f clean package
+RUN mvn clean package
 
 FROM openjdk:17-jdk
 VOLUME /tmp
