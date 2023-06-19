@@ -1,0 +1,28 @@
+version: "3"
+services:
+  ecommerce-backend:
+    container_name: ecommerce-backend
+    image: ecommerce-backend
+    build: .
+    ports:
+      - 8081:8080
+    depends_on:
+      - mysqldb
+    networks:
+      ecommerce-network:
+
+  mysqldb:
+    container_name: mysqldb
+    restart: always
+    image: mysql
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_DATABASE: ecommerce
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      ecommerce-network:
+
+networks:
+  ecommerce-network:
