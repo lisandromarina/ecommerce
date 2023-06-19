@@ -9,6 +9,5 @@ RUN mvn -f /home/ecommerce/pom.xml clean package -Dmaven.test.skip=true
 
 FROM openjdk:17-jdk
 WORKDIR /app
-VOLUME /tmp
-COPY --from=build /home/ecommerce/target/*.jar app.jar
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+COPY --from=build /home/ecommerce/target/*SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
