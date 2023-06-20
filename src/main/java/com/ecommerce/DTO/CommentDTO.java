@@ -45,6 +45,9 @@ public class CommentDTO {
         this.product = product;
     }
 
+    public CommentDTO() {
+    }
+
     public CommentDTO(Long id, String description, Long userId, Long productId) {
         this.id = id;
         this.description = description;
