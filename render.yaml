@@ -10,7 +10,7 @@ services:
       - mysqldb
     env:
       - name: MYSQL_HOST
-        from_service: mysqldb
+        value: mysqldb
     networks:
       - ecommerce-network
 
