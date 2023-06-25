@@ -1,28 +1,25 @@
-version: "3"
 services:
-  ecommerce-back:
-    container_name: ecommerce-back
+  - name: ecommerce-back
     image: ecommerce-back
-    build: .
+    buildCommand: docker build -t ecommerce-back .
+    startCommand: docker run -p 8081:8080 --name ecommerce-back --network ecommerce-network ecommerce-back
     ports:
-      - 8081:8080
-    depends_on:
-      - mysqldb
-    networks:
-      - ecommerce-network
+      - port: 8081
+        as: 8080
+    dependsOn:
+      - name: mysqldb
 
-  mysqldb:
-    container_name: mysqldb
+  - name: mysqldb
     image: mysql
+    startCommand: docker run -p 3308:3306 --name mysqldb --network ecommerce-network -e MYSQL_DATABASE=ecommerce -e MYSQL_USER=licha -e MYSQL_PASSWORD=root -e MYSQL_ROOT_PASSWORD=root mysql
     ports:
-      - 3308:3306
+      - port: 3308
+        as: 3306
     environment:
       MYSQL_DATABASE: ecommerce
       MYSQL_USER: licha
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
-    networks:
-      - ecommerce-network
 
 networks:
-  ecommerce-network:
+  - name: ecommerce-network
