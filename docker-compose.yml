@@ -1,23 +1,21 @@
-version: render/v1
+version: "3"
 services:
-  - name: ecommerce-back
+  ecommerce-back:
+    container_name: ecommerce-back
     image: ecommerce-back
-    build:
-      context: .
+    build: .
     ports:
       - 8081:8080
     depends_on:
       - mysqldb
-    env:
-      - name: MYSQL_HOST
-        value: mysqldb
     networks:
       - ecommerce-network
 
-  - name: mysqldb
+  mysqldb:
+    container_name: mysqldb
     image: mysql
     ports:
-      - 3308:3306
+      - 3306:3306
     environment:
       MYSQL_DATABASE: ecommerce
       MYSQL_USER: licha
@@ -27,5 +25,4 @@ services:
       - ecommerce-network
 
 networks:
-  - name: ecommerce-network
-    type: bridge
+  ecommerce-network:
