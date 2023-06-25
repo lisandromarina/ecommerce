@@ -28,3 +28,4 @@ services:
 
 networks:
   - name: ecommerce-network
+    type: bridge
