@@ -26,7 +26,7 @@ public class Address {
     @Column(name = "address_department")
     private String department;
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id_fk", nullable = false)
     private User user;
 
     @Column(name = "address_is_active")
