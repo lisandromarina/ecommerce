@@ -18,7 +18,7 @@ public class Product implements Serializable {
     @Column(name = "product_name", nullable = false)
     private String name;
 
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id_fk", nullable = false)
     private Long userId;
 
     @Column(name = "product_price", nullable = false )
