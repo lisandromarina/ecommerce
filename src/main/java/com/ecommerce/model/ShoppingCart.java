@@ -24,7 +24,7 @@ public class ShoppingCart implements Serializable {
     private Boolean isComplete;
 
     @ManyToOne
-    @JoinColumn(name = "user_id_fk", nullable = false, updatable = false)
+    @JoinColumn(name = "user_id_fk", nullable = false, updatable = false,  foreignKey = @ForeignKey(name = "fk_shopping_cart_user"))
     private User user;
 
     public ShoppingCart(Long id, LocalDate dateCreated) {
