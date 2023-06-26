@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/authentication")
+@CrossOrigin(origins = "https://sparkling-babka-21868c.netlify.app")
 public class AuthenticationController {
 
     @Autowired
