@@ -23,6 +23,10 @@ services:
       - mysql-db
     networks:
       - network-ecommerce
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/ecommerce
+      SPRING_DATASOURCE_USERNAME: licha
+      SPRING_DATASOURCE_PASSWORD: licha
 
 networks:
   network-ecommerce:
