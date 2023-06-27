@@ -1,0 +1,27 @@
+services:
+  - name: mysql-db
+    dockerfile: Dockerfile
+    env:
+      - MYSQL_DATABASE=ecommerce
+      - MYSQL_USER=licha
+      - MYSQL_PASSWORD=licha
+      - MYSQL_ROOT_PASSWORD=licha
+    ports:
+      - 3309:3306
+    type: docker
+    disk: 1024
+
+  - name: ecommerce-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/ecommerce
+      - SPRING_DATASOURCE_USERNAME=licha
+      - SPRING_DATASOURCE_PASSWORD=licha
+    ports:
+      - 8083:8080
+    depends_on:
+      - mysql-db
+    type: docker
+    disk: 1024
