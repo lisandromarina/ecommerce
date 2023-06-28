@@ -4,10 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://dpg-cidpk9p8g3n4p2p8i6eg-a:5432/ecommerce_h41f
-      - SPRING_DATASOURCE_USERNAME=licha
-      - SPRING_DATASOURCE_PASSWORD=6iPOBSNwuTTCeYIgA8rB5aWOmSKRdmhB
     ports:
       - "8083:8080"
     depends_on:
