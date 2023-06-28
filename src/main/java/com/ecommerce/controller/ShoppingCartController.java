@@ -13,6 +13,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/shoppingCart")
+@CrossOrigin(origins = "https://ecommerce-pdq0.onrender.com", allowCredentials = "true")
 public class ShoppingCartController {
 
     @Autowired

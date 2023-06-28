@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/comment")
+@CrossOrigin(origins = "https://ecommerce-pdq0.onrender.com", allowCredentials = "true")
 public class CommentController {
 
     @Autowired

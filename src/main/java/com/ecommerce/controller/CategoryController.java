@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/category")
+@CrossOrigin(origins = "https://ecommerce-pdq0.onrender.com", allowCredentials = "true")
 public class CategoryController {
 
     @Autowired
