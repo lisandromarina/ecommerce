@@ -44,6 +44,8 @@ public class ProductServiceImpl implements ProductService {
     CommentRepository commentRepository;
     @Override
     public Product save(ProductDTO productDTO) {
+        System.out.println(productDTO.toString());
+        System.out.println(productDTO.getFile());
         validateInvalidProductFields(productDTO);
         System.out.println(productDTO);
         Product product = new Product();

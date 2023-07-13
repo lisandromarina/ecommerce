@@ -73,7 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/product/save").hasAuthority("SELLER")
+                    .antMatchers("/product/save").hasAnyAuthority("SELLER", "ADMIN")
                     //CATEGORY
                     .antMatchers(HttpMethod.GET, "/category/findById/**").hasAuthority("ADMIN") // Restrict GET requests to "/category/findById/**" to users with "SELLER" authority
                     .antMatchers(HttpMethod.POST, "/category/save").hasAuthority("ADMIN") // Restrict POST requests to "/category/save" to users with "SELLER" authority
@@ -84,17 +84,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(STATELESS)
                 .and()
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-    }
-    @Bean
-    public CorsFilter corsFilter() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.addAllowedHeader("*");
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration);
-
-        return new CorsFilter(source);
     }
 }

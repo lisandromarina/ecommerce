@@ -7,6 +7,7 @@ import com.ecommerce.model.User;
 import com.ecommerce.repository.UserRepository;
 import com.ecommerce.service.UserService;
 import com.ecommerce.utils.JwtTokenUtil;
+import com.ecommerce.utils.email.VerificationAccountEmailMessage;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,19 +35,12 @@ import java.util.Map;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
-
     @Autowired
     UserRepository userRepository;
-
     @Autowired
-    JwtUserDetailsService userDetailsService;
-
-    @Autowired
-    private JavaMailSender mailSender;
-
+    private EmailServiceImpl emailService;
     @Autowired
     JwtTokenUtil jwtTokenUtil;
-
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -61,7 +55,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(userDTO.getUsername());
         user.setDateCreated(LocalDate.now());
         user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
-        user.setRole(Role.SELLER);
+        user.setRole(Role.USER);
 
         String randomCode = RandomString.make(64);
         user.setVerificationCode(randomCode);
@@ -114,7 +108,6 @@ public class UserServiceImpl implements UserService {
             if (auth.isAuthenticated()) {
                 UserDTO user = userRepository.findUserByUsername(username);
                 String token = jwtTokenUtil.generateToken(user);
-                responseMap.put("error", false);
                 responseMap.put("message", "Logged In");
                 responseMap.put("token", token);
                 return ResponseEntity.ok(responseMap);
@@ -166,32 +159,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException {
-        String toAddress = user.getEmail();
-        String fromAddress = "lisandromarina1@gmail.com";
-        String senderName = "Mercado Licha";
-        String subject = "Por favor verifique su cuenta!";
-        String content = "Querido [[name]],<br>"
-                + "Por favor haga click en el enlace de abajo para verificar tu cuenta:<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFICAR</a></h3>"
-                + "Muchas gracias!,<br>"
-                + "Mercado Licha.";
+    private void sendVerificationEmail(User user, String siteURL) {
+        VerificationAccountEmailMessage emailMessage = new VerificationAccountEmailMessage(user.getEmail(),
+                user.getFirstName(), user.getVerificationCode(), siteURL);
 
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        helper.setFrom(fromAddress, senderName);
-        helper.setTo(toAddress);
-        helper.setSubject(subject);
-
-        content = content.replace("[[name]]", user.getFirstName());
-        String verifyURL = siteURL + "/user/verify?code=" + user.getVerificationCode();
-
-        content = content.replace("[[URL]]", verifyURL);
-
-        helper.setText(content, true);
-
-        mailSender.send(message);
+            emailService.sendEmail(emailMessage);
     }
 
     private void validateUserFields(UserDTO userDTO) {

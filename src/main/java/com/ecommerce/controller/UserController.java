@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "https://ecommerce-pdq0.onrender.com", allowCredentials = "true")
 public class UserController {
 
     @Autowired

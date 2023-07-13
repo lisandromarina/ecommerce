@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
 @RequestMapping("/address")
-@CrossOrigin(origins = "https://ecommerce-pdq0.onrender.com", allowCredentials = "true")
 public class AddressController {
 
     @Autowired
