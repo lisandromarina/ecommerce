@@ -5,7 +5,9 @@ import com.ecommerce.DTO.ProductDTO;
 import com.ecommerce.service.ProductService;
 import com.ecommerce.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -31,9 +33,14 @@ public class ProductController {
         return productService.findProductByIdCategory(idCategory);
     }
 
-    @PostMapping("/save")
-    public void saveProduct(@RequestBody ProductDTO productDto) {
+    @PostMapping(path = "/save")
+    public void saveProduct(@ModelAttribute ProductDTO productDto) {
         productService.save(productDto);
+    }
+
+    @PostMapping(path = "/findProductListBySearchTool")
+    public List<ProductDTO> findProductsBySearchTool(@RequestBody String inputText) {
+        return productService.findBySearchTool(inputText);
     }
 
     @PutMapping("/update")

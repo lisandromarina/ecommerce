@@ -7,9 +7,13 @@ import com.ecommerce.model.User;
 import com.ecommerce.repository.UserRepository;
 import com.ecommerce.service.UserService;
 import com.ecommerce.utils.JwtTokenUtil;
+import com.ecommerce.utils.email.VerificationAccountEmailMessage;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +22,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.transaction.Transactional;
+import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -27,21 +35,17 @@ import java.util.Map;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
-
     @Autowired
     UserRepository userRepository;
-
     @Autowired
-    JwtUserDetailsService userDetailsService;
-
+    EmailServiceImpl emailService;
     @Autowired
     JwtTokenUtil jwtTokenUtil;
-
     @Autowired
     AuthenticationManager authenticationManager;
 
     @Override
-    public ResponseEntity<?> saveUser(UserDTO userDTO) {
+    public ResponseEntity<?> saveUser(UserDTO userDTO, String siteURL) {
         validateUserFields(userDTO);
 
         User user = new User();
@@ -50,13 +54,17 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDTO.getEmail());
         user.setUsername(userDTO.getUsername());
         user.setDateCreated(LocalDate.now());
-        user.setActive(true);
         user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
         user.setRole(Role.USER);
+
+        String randomCode = RandomString.make(64);
+        user.setVerificationCode(randomCode);
+        user.setActive(false);
 
         try {
             Long userId = userRepository.save(user).getId();
             userDTO.setId(userId);
+            sendVerificationEmail(user, siteURL);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
@@ -68,6 +76,23 @@ public class UserServiceImpl implements UserService {
         responseMap.put("message", "Account created successfully");
         responseMap.put("token", token);
         return ResponseEntity.ok(responseMap);
+    }
+
+    public boolean verify(String verificationCode) {
+        try{
+        User user = userRepository.findByVerificationCode(verificationCode);
+        if (user == null || user.getActive()) {
+            return false;
+        } else {
+            user.setVerificationCode(null);
+            user.setActive(true);
+            userRepository.save(user);
+
+            return true;
+        }
+        }catch (Exception e){
+            throw new ApiRequestException(e.getMessage(), e);
+        }
     }
 
     @Override
@@ -83,7 +108,6 @@ public class UserServiceImpl implements UserService {
             if (auth.isAuthenticated()) {
                 UserDTO user = userRepository.findUserByUsername(username);
                 String token = jwtTokenUtil.generateToken(user);
-                responseMap.put("error", false);
                 responseMap.put("message", "Logged In");
                 responseMap.put("token", token);
                 return ResponseEntity.ok(responseMap);
@@ -120,13 +144,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long userId) {
+    public void delete(Long userId, Principal principal) {
         validateUserExist(userId);
-        try{
-            userRepository.invalidateUserById(userId);
-        }catch (Exception e){
-            throw new ApiRequestException(e.getMessage(), e);
+        UserDTO userDTO = userRepository.findUserDTOById(userId);
+        if(principal.getName().equals(userDTO.getUsername())){
+            try{
+                userRepository.invalidateUserById(userId);
+            }catch (Exception e){
+                throw new ApiRequestException(e.getMessage(), e);
+            }
         }
+        else{
+            throw new ApiRequestException("No puede eliminar otro usuario que no sea el tuyo", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private void sendVerificationEmail(User user, String siteURL) {
+        VerificationAccountEmailMessage emailMessage = new VerificationAccountEmailMessage(user.getEmail(),
+                user.getFirstName(), user.getVerificationCode(), siteURL);
+            emailService.sendEmail(emailMessage);
     }
 
     private void validateUserFields(UserDTO userDTO) {

@@ -32,6 +32,10 @@ public class ShoppingCart implements Serializable {
         this.dateCreated = dateCreated;
     }
 
+    public ShoppingCart(Long id) {
+        this.id = id;
+    }
+
     public ShoppingCart() {
     }
 

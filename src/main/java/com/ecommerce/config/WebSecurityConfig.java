@@ -4,6 +4,7 @@ import com.ecommerce.utils.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -17,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 
@@ -44,15 +46,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/authentication/**");
-        web.ignoring().antMatchers("/product/findAll");
-        web.ignoring().antMatchers("/product/findById/**");
-        web.ignoring().antMatchers("/product/findProductByIdCategory/**");
-        web.ignoring().antMatchers("/category/findAll");
+        web.ignoring()
+                .antMatchers("/authentication/**")
+                .antMatchers("/product/findAll")
+                .antMatchers("/product/findById/**")
+                .antMatchers("/product/findProductByIdCategory/**")
+                .antMatchers("/category/findAll")
+                .antMatchers("/user/verify")
+                .antMatchers("/product/findProductListBySearchTool");
     }
 
     @Bean
@@ -62,23 +68,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable();
-        httpSecurity.cors();
-        httpSecurity.authorizeRequests().antMatchers(POST, "/authentication/**").permitAll();
-        httpSecurity.authorizeRequests().anyRequest().authenticated();
-        httpSecurity.sessionManagement().sessionCreationPolicy(STATELESS);
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
-        configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+        httpSecurity
+                .csrf().disable()
+                .cors()
+                .and()
+                .authorizeRequests()
+                    .antMatchers("/product/save").hasAnyAuthority("SELLER", "ADMIN")
+                    //CATEGORY
+                    .antMatchers(HttpMethod.GET, "/category/findById/**").hasAuthority("ADMIN") // Restrict GET requests to "/category/findById/**" to users with "SELLER" authority
+                    .antMatchers(HttpMethod.POST, "/category/save").hasAuthority("ADMIN") // Restrict POST requests to "/category/save" to users with "SELLER" authority
+                    .antMatchers(HttpMethod.PUT, "/category/update").hasAuthority("ADMIN") // Restrict PUT requests to "/category/update" to users with "SELLER" authority
+                    .antMatchers(HttpMethod.DELETE, "/category/delete/**").hasAuthority("ADMIN") // Restrict DELETE requests to "/category/delete/**" to users with "SELLER" authority
+                    .anyRequest().authenticated()
+                .and()
+                .sessionManagement().sessionCreationPolicy(STATELESS)
+                .and()
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

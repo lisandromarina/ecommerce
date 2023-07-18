@@ -1,7 +1,6 @@
 package com.ecommerce.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,6 +25,9 @@ public class Product implements Serializable {
 
     @Column(name = "product_description")
     private String description;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @Column(name = "product_is_active", nullable = false)
     private Boolean isActive;
@@ -60,6 +62,14 @@ public class Product implements Serializable {
 
     public Boolean getActive() {
         return isActive;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void setActive(Boolean active) {

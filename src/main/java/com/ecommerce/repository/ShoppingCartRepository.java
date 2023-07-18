@@ -3,6 +3,7 @@ package com.ecommerce.repository;
 import com.ecommerce.DTO.ShoppingCartDTO;
 import com.ecommerce.model.ShoppingCart;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -24,7 +25,7 @@ public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long
                     "sc.dateCreated, " +
                     "sc.isComplete) " +
                     "FROM ShoppingCart sc " +
-                    "WHERE sc.user.id = :userId"
+                    "WHERE sc.user.id = :userId AND sc.isComplete = false"
     )
     ShoppingCartDTO findByUserId(@Param("userId") Long userId);
 
@@ -33,4 +34,10 @@ public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long
                     "FROM ShoppingCart sc WHERE sc.user.id = :userId"
     )
     Boolean existsByUserId(@Param("userId") Long userId);
+
+    @Modifying
+    @Query("UPDATE ShoppingCart sc " +
+            "SET sc.isComplete = true " +
+            "WHERE sc.id = :shoppingCartId")
+    void completeShoppingCart(@Param("shoppingCartId") Long shoppingCartId);
 }

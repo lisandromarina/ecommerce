@@ -3,6 +3,8 @@ package com.ecommerce.DTO;
 public class ShoppingCartProductDTO {
     private Long idProduct;
     private Long idShoppingCart;
+
+    public String imageUrl;
     private Double sellPrice;
     private String nameProduct;
     private Integer quantity;
@@ -53,14 +55,27 @@ public class ShoppingCartProductDTO {
         return userId;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Double getTotal(){
+        return this.sellPrice * this.quantity;
+    }
+
     public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public ShoppingCartProductDTO(Long productId, String name, Double sellPrice, Integer quantity) {
+    public ShoppingCartProductDTO(Long productId, String name, Double sellPrice, Integer quantity, String imageUrl) {
         this.nameProduct = name;
         this.idProduct = productId;
         this.sellPrice = sellPrice;
         this.quantity = quantity;
+        this.imageUrl = imageUrl;
     }
 }

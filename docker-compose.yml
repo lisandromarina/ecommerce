@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  ecommerce-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8080"
+    depends_on:
+      - postgres-db
+    volumes:
+      - ./path/to/app:/app
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+
+volumes:
+  postgres-data:

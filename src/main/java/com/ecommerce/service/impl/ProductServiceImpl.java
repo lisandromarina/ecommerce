@@ -1,54 +1,72 @@
 package com.ecommerce.service.impl;
 
+import com.ecommerce.DTO.CommentDTO;
 import com.ecommerce.DTO.ProductDTO;
 import com.ecommerce.exception.ApiRequestException;
 import com.ecommerce.model.Category;
 import com.ecommerce.model.Product;
 import com.ecommerce.repository.CategoryRepository;
+import com.ecommerce.repository.CommentRepository;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
 public class ProductServiceImpl implements ProductService {
-
     @Autowired
     ProductRepository productRepository;
-
     @Autowired
     CategoryRepository categoryRepository;
-
+    @Autowired
+    ImageKitServiceImpl imageKitService;
+    @Autowired
+    CommentRepository commentRepository;
     @Override
     public Product save(ProductDTO productDTO) {
-        validateInvalidProductFields(productDTO);
-
-        Product product = new Product();
-        product.setName(productDTO.getName());
-        product.setPrice(productDTO.getPrice());
-        product.setUserId(productDTO.getUserId());
-        product.setDescription(productDTO.getDescription());
-        product.setActive(Boolean.TRUE);
-
-        Category category = null;
-        if(productDTO.getCategoryDTO() != null){
-            category = getCategoryById(productDTO.getCategoryDTO().getId());
-        }
-        product.setCategory(category);
-
         try {
+            validateInvalidProductFields(productDTO);
+
+            Product product = new Product();
+            product.setName(productDTO.getName());
+            product.setPrice(productDTO.getPrice());
+            product.setUserId(productDTO.getUserId());
+            product.setDescription(productDTO.getDescription());
+            product.setActive(Boolean.TRUE);
+
+            Category category = null;
+            if(productDTO.getCategoryId() != null){
+                category = getCategoryById(productDTO.getCategoryId());
+            }
+            product.setCategory(category);
+
+            String imageUrl = uploadImages(productDTO.getFile());
+            product.setImageUrl(imageUrl);
             return productRepository.save(product);
+
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
     }
 
+    private String uploadImages(MultipartFile file){
+        try {
+            return imageKitService.uploadImage(file.getBytes(), file.getOriginalFilename());
+        }catch (Exception e){
+            throw new ApiRequestException(e.getMessage(), e);
+        }
+    }
     @Override
     public List<ProductDTO> findAll() {
         try {
@@ -68,7 +86,10 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO findById(Long id) {
         validateProductExist(id);
         try {
-            return productRepository.findProductDTOById(id);
+            ProductDTO productDTO = productRepository.findProductDTOById(id);
+            List<CommentDTO> comments = commentRepository.findCommentsByIProductId(id);
+            productDTO.setComments(comments);
+            return productDTO;
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
@@ -87,6 +108,13 @@ public class ProductServiceImpl implements ProductService {
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public List<ProductDTO> findBySearchTool(String inputText) {
+        System.out.println(inputText);
+        Pageable pageable = PageRequest.of(0, 7);
+        return productRepository.findProductNamesContainingInput(inputText, pageable);
     }
 
     private void validateProductExist(Long id) {
