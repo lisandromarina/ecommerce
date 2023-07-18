@@ -84,6 +84,7 @@ public class ProductDTO {
         return price;
     }
 
+
     public MultipartFile getFile() {
         return file;
     }

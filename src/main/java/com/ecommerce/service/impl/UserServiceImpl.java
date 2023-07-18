@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    private EmailServiceImpl emailService;
+    EmailServiceImpl emailService;
     @Autowired
     JwtTokenUtil jwtTokenUtil;
     @Autowired
@@ -162,7 +162,6 @@ public class UserServiceImpl implements UserService {
     private void sendVerificationEmail(User user, String siteURL) {
         VerificationAccountEmailMessage emailMessage = new VerificationAccountEmailMessage(user.getEmail(),
                 user.getFirstName(), user.getVerificationCode(), siteURL);
-
             emailService.sendEmail(emailMessage);
     }
 
