@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -130,7 +128,6 @@ public class ProductServiceImpl implements ProductService {
                 || productDTO.getDescription() == null
                 || productDTO.getDescription().isEmpty()
                 || productDTO.getPrice() == null
-                || productDTO.getName().isEmpty()
                 || productDTO.getUserId() == null){
             throw new ApiRequestException("The product cannot have empty fields", HttpStatus.BAD_REQUEST);
         }
