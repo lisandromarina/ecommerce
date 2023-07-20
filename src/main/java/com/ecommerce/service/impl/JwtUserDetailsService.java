@@ -40,7 +40,6 @@ public class JwtUserDetailsService implements UserDetailsService {
         String username = jwtTokenUtil.getUsernameFromToken(token);
         if (StringUtils.isNotEmpty(username)) {
             UserDetails userDetails = loadUserByUsername(username);
-            System.out.println(jwtTokenUtil.validateToken(token, userDetails));
             return jwtTokenUtil.validateToken(token, userDetails);
         }
         return false;
