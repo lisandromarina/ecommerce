@@ -122,6 +122,9 @@ public class AddressDTO {
         this.province = province;
     }
 
+    public AddressDTO() {
+    }
+
     public AddressDTO(Long id, String fullName, String street, String streetNumber, String department, String postalCode,
                       String location,String province, String country, Boolean active, Boolean isDeleted) {
         this.id = id;
