@@ -20,7 +20,6 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     CommentRepository commentRepository;
     @Override
-
     public Comment save(CommentDTO commentDTO) {
         Comment comment = new Comment();
         comment.setDescription(commentDTO.getDescription());
