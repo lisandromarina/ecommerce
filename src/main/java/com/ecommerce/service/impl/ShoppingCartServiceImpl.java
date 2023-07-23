@@ -24,19 +24,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Autowired
     ShoppingCartRepository shoppingCartRepository;
-
     @Autowired
     ShoppingCartProductRepository shoppingCartProductRepository;
-
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     AddressRepository addressRepository;
-
     @Autowired
     ProductRepository productRepository;
-
     @Autowired
     ShippingRepository shippingRepository;
 
