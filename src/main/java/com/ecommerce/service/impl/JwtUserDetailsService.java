@@ -21,7 +21,6 @@ import java.util.List;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
-
     @Autowired
     UserRepository userRepository;
 
