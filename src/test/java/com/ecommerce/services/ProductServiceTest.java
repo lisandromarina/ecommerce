@@ -1,28 +1,24 @@
 package com.ecommerce.services;
 
 import com.ecommerce.DTO.CategoryDTO;
+import com.ecommerce.DTO.CommentDTO;
 import com.ecommerce.DTO.ProductDTO;
 import com.ecommerce.controller.ProductController;
 import com.ecommerce.exception.ApiRequestException;
 import com.ecommerce.model.Category;
 import com.ecommerce.model.Product;
 import com.ecommerce.repository.CategoryRepository;
+import com.ecommerce.repository.CommentRepository;
 import com.ecommerce.repository.ProductRepository;
-import com.ecommerce.service.ProductService;
+import com.ecommerce.service.impl.ImageKitServiceImpl;
 import com.ecommerce.service.impl.ProductServiceImpl;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,49 +34,88 @@ public class ProductServiceTest {
     private ProductRepository productRepository;
 
     @Mock
+    private CommentRepository commentRepository;
+
+    @Mock
     private CategoryRepository categoryRepository;
+
+    @Mock
+    private ImageKitServiceImpl imageKitService;
 
     @InjectMocks
     private ProductServiceImpl productService;
 
     @Test
-    @Disabled
-    public void createProductWithCategorySuccessTest(){
+    public void testSaveProductWithValidCategory() {
         ProductDTO productDTO = new ProductDTO();
-        productDTO.setActive(true);
-        productDTO.setName("oneProduct");
-        productDTO.setDescription("oneDescription");
+        productDTO.setName("oneName");
+        productDTO.setPrice(100.0);
         productDTO.setUserId(1L);
-        productDTO.setCategoryDTO(new CategoryDTO(1L, "oneCategory", true));
-        productDTO.setPrice(0.8);
+        productDTO.setDescription("oneDescription");
+        productDTO.setCategoryId(1L); // Assuming a valid category ID
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "file",                // Name of the file attribute
+                "test.txt",            // Original file name
+                "text/plain",          // Content type
+                "Test file content".getBytes()  // File content as byte array
+        );
+        productDTO.setFile(mockFile);
 
-        when(categoryRepository.findById(1L)).thenReturn(Optional.of(new Category()));
-        when(productRepository.save(any(Product.class))).thenReturn(new Product());
+        Category category = new Category();
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 
-        Product product = productService.save(productDTO);
-        assertNotNull(product);
+        String imageUrl = "http://example.com/mock-image-url.jpg";
+        when(imageKitService.uploadImage(any(byte[].class), anyString())).thenReturn(imageUrl);
+
+        lenient().when(productRepository.save(any(Product.class))).thenAnswer(invocation -> {
+            Product product = invocation.getArgument(0);
+            product.setId(1L);
+            product.setName("oneName");
+            product.setPrice(100.0);
+            return product;
+        });
+        Product savedProduct = productService.save(productDTO);
+
+        verify(productRepository, atLeastOnce()).save(any(Product.class));
+        assertNotNull(savedProduct);
+        assertEquals(productDTO.getName(), savedProduct.getName());
+        assertEquals(productDTO.getPrice(), savedProduct.getPrice());
+        assertEquals(productDTO.getUserId(), savedProduct.getUserId());
+        assertEquals(productDTO.getDescription(), savedProduct.getDescription());
     }
-
     @Test
-    @Disabled
     public void createProductWithoutCategorySuccessTest(){
         ProductDTO productDTO = new ProductDTO();
-        productDTO.setActive(true);
-        productDTO.setName("oneProduct");
-        productDTO.setDescription("oneDescription");
+        productDTO.setName("oneName");
+        productDTO.setPrice(100.0);
         productDTO.setUserId(1L);
-        productDTO.setCategoryDTO(new CategoryDTO(1L, "oneCategory", true));
-        productDTO.setPrice(0.8);
+        productDTO.setDescription("oneDescription");
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "file",                // Name of the file attribute
+                "test.txt",            // Original file name
+                "text/plain",          // Content type
+                "Test file content".getBytes()  // File content as byte array
+        );
+        productDTO.setFile(mockFile);
 
-        Optional<Category> categoryOptional = Optional.ofNullable(null);
+        String imageUrl = "http://example.com/mock-image-url.jpg";
+        when(imageKitService.uploadImage(any(byte[].class), anyString())).thenReturn(imageUrl);
 
-        when(categoryRepository.findById(anyLong())).thenReturn(categoryOptional);
-        when(productRepository.save(any(Product.class))).thenReturn(new Product());
+        lenient().when(productRepository.save(any(Product.class))).thenAnswer(invocation -> {
+            Product product = invocation.getArgument(0);
+            product.setId(1L);
+            product.setName("oneName");
+            product.setPrice(100.0);
+            return product;
+        });
+        Product savedProduct = productService.save(productDTO);
 
-        Product product = productService.save(productDTO);
-
-        assertFalse(categoryOptional.isPresent());
-        assertNotNull(product);
+        verify(productRepository, atLeastOnce()).save(any(Product.class));
+        assertNotNull(savedProduct);
+        assertEquals(productDTO.getName(), savedProduct.getName());
+        assertEquals(productDTO.getPrice(), savedProduct.getPrice());
+        assertEquals(productDTO.getUserId(), savedProduct.getUserId());
+        assertEquals(productDTO.getDescription(), savedProduct.getDescription());
     }
 
     @Test
@@ -158,19 +193,21 @@ public class ProductServiceTest {
     }
 
     @Test
-    @Disabled
     public void findProductByIdSuccessTest(){
         Long productId = 1L;
+        List<CommentDTO> listComments = new ArrayList<>();
         ProductDTO productDTO = new ProductDTO();
         productDTO.setId(productId);
 
         when(productRepository.existsById(productId)).thenReturn(true);
         when(productRepository.findProductDTOById(productId)).thenReturn(productDTO);
+        when(commentRepository.findCommentsByIProductId(productId)).thenReturn(listComments);
 
         ProductDTO result = productService.findById(productId);
 
         assertEquals(result, productDTO, "the products must be the same");
         assertTrue(productDTO.getId() == productId);
+        assertTrue(productDTO.getComments() == listComments);
     }
 
     @Test
@@ -207,6 +244,4 @@ public class ProductServiceTest {
 
         verify(productRepository, times(1)).invalidateProductById(productId);
     }
-
-
 }
