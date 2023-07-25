@@ -24,7 +24,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    JwtTokenUtil jwtTokenUtil;//add comment
+    JwtTokenUtil jwtTokenUtil;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
