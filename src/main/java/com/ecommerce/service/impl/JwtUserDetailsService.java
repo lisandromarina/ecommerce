@@ -23,7 +23,6 @@ import java.util.List;
 public class JwtUserDetailsService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
