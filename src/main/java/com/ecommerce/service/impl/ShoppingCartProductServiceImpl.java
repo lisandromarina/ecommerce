@@ -11,6 +11,7 @@ import com.ecommerce.repository.UserRepository;
 import com.ecommerce.service.ShoppingCartProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -35,23 +36,41 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
     ProductRepository productRepository;
 
     //create ShoppingCartProducts for a specific shoppingCart
+
     @Override
-    public void createOrUpdate(ShoppingCartProductDTO shoppingCartProductDTO) {
+    public ResponseEntity<ShoppingCartProduct> createShoppingCartProduct(ShoppingCartProductDTO shoppingCartProductDTO){
+        validateShoppingCartProductFields(shoppingCartProductDTO);
+
+        ShoppingCart shoppingCart = createShoppingCart(shoppingCartProductDTO.getUserId());
+        Long idProduct = shoppingCartProductDTO.getIdProduct();
+
+        ShoppingCartProductPK shoppingCartProductPK = createShoppingCartProductPk(shoppingCart.getId(), idProduct);
+
+        ShoppingCartProduct shoppingCartProduct = createShoppingCartProduct(shoppingCartProductPK, shoppingCartProductDTO);
+
+        try {
+            ShoppingCartProduct ShoppingCartProduct  = shoppingCartProductRepository.save(shoppingCartProduct);
+            return ResponseEntity.status(HttpStatus.CREATED).body(ShoppingCartProduct);
+        } catch (Exception e) {
+            throw new ApiRequestException(e.getMessage(), e);
+        }
+    }
+    @Override
+    public ResponseEntity<ShoppingCartProduct> updateShoppingCartProduct(ShoppingCartProductDTO shoppingCartProductDTO){
         validateShoppingCartProductFields(shoppingCartProductDTO);
 
         try {
-            Long userId = shoppingCartProductDTO.getUserId();
-            ShoppingCartDTO shoppingCartDTO = shoppingCartRepository.findByUserId(userId);
+            ShoppingCartDTO shoppingCartDTO = shoppingCartRepository.findByUserId(shoppingCartProductDTO.getUserId());
 
-            Long idShoppingCart;
-            if (shoppingCartDTO == null) {
-                idShoppingCart = createShoppingCart(userId);
-            } else {
-                idShoppingCart = shoppingCartDTO.getId();
-            }
+            Long idProduct = shoppingCartProductDTO.getIdProduct();
+            ShoppingCartProductPK shoppingCartProductPK = createShoppingCartProductPk(shoppingCartDTO.getId(), idProduct);
 
-            createShoppingCartProduct(shoppingCartProductDTO, idShoppingCart);
-        } catch (Exception e) {
+            ShoppingCartProduct shoppingCartProduct = createShoppingCartProduct(shoppingCartProductPK, shoppingCartProductDTO);
+
+            ShoppingCartProduct shoppingCartProductSaved = shoppingCartProductRepository.save(shoppingCartProduct);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartProductSaved);
+        }catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
     }
@@ -78,20 +97,7 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
         return shoppingCartProductRepository.findShoppingCartProductByShoppingCartId(idShoppingCart);
     }
 
-    private void createShoppingCartProduct(ShoppingCartProductDTO shoppingCartProductDTO, Long idShoppingCart) {
-        Long idProduct = shoppingCartProductDTO.getIdProduct();
-        ShoppingCartProductPK shoppingCartProductPK = createShoppingCartProductPk(idShoppingCart, idProduct);
-        //VALIDAR SI EL CARRITO NO TIENE PRODUCTOS, LO ELIMINO
-        ShoppingCartProduct shoppingCartProduct = createShoppingCartProduct(shoppingCartProductPK, shoppingCartProductDTO);
-
-        try {
-            shoppingCartProductRepository.save(shoppingCartProduct);
-        } catch (Exception e) {
-            throw new ApiRequestException(e.getMessage(), e);
-        }
-    }
-
-    private Long createShoppingCart(Long userId) {
+    private ShoppingCart createShoppingCart(Long userId) {
         User user = getUserById(userId);
 
         ShoppingCart shoppingCart = new ShoppingCart();
@@ -100,7 +106,7 @@ public class ShoppingCartProductServiceImpl implements ShoppingCartProductServic
 
         try {
             shoppingCart.setUser(user);
-            return shoppingCartRepository.save(shoppingCart).getId();
+            return shoppingCartRepository.save(shoppingCart);
         } catch (Exception e) {
             throw new ApiRequestException(e.getMessage(), e);
         }
